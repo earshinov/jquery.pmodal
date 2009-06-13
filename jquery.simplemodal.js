@@ -61,10 +61,6 @@
  * @version @VERSION
  */
 ;(function ($) {
-	var ie6 = $.browser.msie && parseInt($.browser.version) == 6 && typeof window['XMLHttpRequest'] != "object",
-		ieQuirks = null,
-		w = [];
-
 	/*
 	 * Stand-alone function to create a modal dialog.
 	 * 
@@ -172,9 +168,6 @@
 				return false;
 			}
 
-			// $.boxModel is undefined if checked earlier
-			ieQuirks = $.browser.msie && !$.boxModel;
-
 			// merge defaults and user options
 			this.opts = $.extend({}, $.modal.defaults, options);
 
@@ -209,7 +202,7 @@
 				return false;
 			}
 
-			// create the modal overlay, container and, if necessary, iframe
+			// create the modal overlay and container
 			this.create(data);
 			data = null;
 
@@ -228,25 +221,6 @@
 		 * Create and add the modal overlay and container to the page
 		 */
 		create: function (data) {
-			// get the window properties
-			w = this.getDimensions();
-
-			// add an iframe to prevent select options from bleeding through
-			if (ie6) {
-				this.dialog.iframe = $('<iframe src="javascript:false;"/>')
-					.css($.extend(this.opts.iframeCss, {
-						display: 'none',
-						opacity: 0, 
-						position: 'fixed',
-						height: w[0],
-						width: w[1],
-						zIndex: this.opts.zIndex,
-						top: 0,
-						left: 0
-					}))
-					.appendTo(this.opts.appendTo);
-			}
-
 			// create the overlay
 			this.dialog.overlay = $('<div/>')
 				.attr('id', this.opts.overlayId)
@@ -254,8 +228,6 @@
 				.css($.extend(this.opts.overlayCss, {
 					display: 'none',
 					opacity: this.opts.opacity / 100,
-					height: w[0],
-					width: w[1],
 					position: 'fixed',
 					left: 0,
 					top: 0,
@@ -292,13 +264,7 @@
 				}));
 			data = null;
 
-			this.setContainerDimensions();
 			this.dialog.data.appendTo(this.dialog.wrap);
-
-			// fix issues with IE
-			if (ie6 || ieQuirks) {
-				this.fixIE();
-			}
 		},
 		/*
 		 * Bind events
@@ -329,24 +295,6 @@
           }
         });
       }
-
-			// update window size
-			$(window).bind('resize.simplemodal', function () {
-				// redetermine the window width/height
-				w = self.getDimensions();
-
-				// reposition the dialog
-				self.opts.autoResize ? self.setContainerDimensions() : self.setPosition();
-	
-				if (ie6 || ieQuirks) {
-					self.fixIE();
-				}
-				else {
-					// update the iframe & overlay
-					self.dialog.iframe && self.dialog.iframe.css({height: w[0], width: w[1]});
-					self.dialog.overlay.css({height: w[0], width: w[1]});
-				}
-			});
 		},
 		/*
 		 * Unbind events
@@ -354,138 +302,14 @@
 		unbindEvents: function () {
 			$('.' + this.opts.closeClass).unbind('click.simplemodal');
 			$(document).unbind('keydown.simplemodal');
-			$(window).unbind('resize.simplemodal');
 			this.dialog.overlay.unbind('click.simplemodal');
-		},
-		/*
-		 * Fix issues in IE6 and IE7 in quirks mode
-		 */
-		fixIE: function () {
-			var p = this.opts.position;
-
-			// simulate fixed position - adapted from BlockUI
-			$.each([this.dialog.iframe || null, this.dialog.overlay, this.dialog.container], function (i, el) {
-				if (el) {
-					var bch = 'document.body.clientHeight', bcw = 'document.body.clientWidth',
-						bsh = 'document.body.scrollHeight', bsl = 'document.body.scrollLeft',
-						bst = 'document.body.scrollTop', bsw = 'document.body.scrollWidth',
-						ch = 'document.documentElement.clientHeight', cw = 'document.documentElement.clientWidth',
-						sl = 'document.documentElement.scrollLeft', st = 'document.documentElement.scrollTop',
-						s = el[0].style;
-
-					s.position = 'absolute';
-					if (i < 2) {
-						s.removeExpression('height');
-						s.removeExpression('width');
-						s.setExpression('height','' + bsh + ' > ' + bch + ' ? ' + bsh + ' : ' + bch + ' + "px"');
-						s.setExpression('width','' + bsw + ' > ' + bcw + ' ? ' + bsw + ' : ' + bcw + ' + "px"');
-					}
-					else {
-						var te, le;
-						if (p && p.constructor == Array) {
-							var top = p[0] 
-								? typeof p[0] == 'number' ? p[0].toString() : p[0].replace(/px/, '')
-								: el.css('top').replace(/px/, '');
-							te = top.indexOf('%') == -1 
-								? top + ' + (t = ' + st + ' ? ' + st + ' : ' + bst + ') + "px"'
-								: parseInt(top.replace(/%/, '')) + ' * ((' + ch + ' || ' + bch + ') / 100) + (t = ' + st + ' ? ' + st + ' : ' + bst + ') + "px"';
-
-							if (p[1]) {
-								var left = typeof p[1] == 'number' ? p[1].toString() : p[1].replace(/px/, '');
-								le = left.indexOf('%') == -1 
-									? left + ' + (t = ' + sl + ' ? ' + sl + ' : ' + bsl + ') + "px"'
-									: parseInt(left.replace(/%/, '')) + ' * ((' + cw + ' || ' + bcw + ') / 100) + (t = ' + sl + ' ? ' + sl + ' : ' + bsl + ') + "px"';
-							}
-						}
-						else {
-							te = '(' + ch + ' || ' + bch + ') / 2 - (this.offsetHeight / 2) + (t = ' + st + ' ? ' + st + ' : ' + bst + ') + "px"';
-							le = '(' + cw + ' || ' + bcw + ') / 2 - (this.offsetWidth / 2) + (t = ' + sl + ' ? ' + sl + ' : ' + bsl + ') + "px"';
-						}
-						s.removeExpression('top');
-						s.removeExpression('left');
-						s.setExpression('top', te);
-						s.setExpression('left', le);
-					}
-				}
-			});
-		},
-		getDimensions: function () {
-			var el = $(window);
-
-			// fix a jQuery/Opera bug with determining the window height
-			var h = $.browser.opera && $.browser.version > '9.5' && $.fn.jquery <= '1.2.6' ? document.documentElement['clientHeight'] :
-				$.browser.opera && $.browser.version < '9.5' && $.fn.jquery > '1.2.6' ? window.innerHeight :
-				el.height();
-
-			return [h, el.width()];
-		},
-		getVal: function (v) {
-			return v == 'auto' ? 0 : parseInt(v.replace(/px/, ''));
-		},
-		setContainerDimensions: function () {
-			// get the dimensions for the container and data
-			var ch = this.getVal(this.dialog.container.css('height')), cw = this.dialog.container.width(),
-				dh = this.dialog.data.height(), dw = this.dialog.data.width();
-			
-			var mh = this.opts.maxHeight && this.opts.maxHeight < w[0] ? this.opts.maxHeight : w[0],
-				mw = this.opts.maxWidth && this.opts.maxWidth < w[1] ? this.opts.maxWidth : w[1];
-
-			// height
-			if (!ch) {
-				if (!dh) {ch = this.opts.minHeight;}
-				else {
-					if (dh > mh) {ch = mh;}
-					else if (dh < this.opts.minHeight) {ch = this.opts.minHeight;}
-					else {ch = dh;}
-				}
-			}
-			else {
-				ch = ch > mh ? mh : ch;
-			}
-
-			// width
-			if (!cw) {
-				if (!dw) {cw = this.opts.minWidth;}
-				else {
-					if (dw > mw) {cw = mw;}
-					else if (dw < this.opts.minWidth) {cw = this.opts.minWidth;}
-					else {cw = dw;}
-				}
-			}
-			else {
-				cw = cw > mw ? mw : cw;
-			}
-
-			this.dialog.container.css({height: ch, width: cw});
-			if (dh > ch || dw > cw) {
-				this.dialog.wrap.css({overflow:'auto'});
-			}
-			this.setPosition();
-		},
-		setPosition: function () {
-			var top, left,
-				hc = (w[0]/2) - ((this.dialog.container.height() || this.dialog.data.height())/2),
-				vc = (w[1]/2) - ((this.dialog.container.width() || this.dialog.data.width())/2);
-
-			if (this.opts.position && this.opts.position.constructor == Array) {
-				top = this.opts.position[0] || hc;
-				left = this.opts.position[1] || vc;
-			} else {
-				top = hc;
-				left = vc;
-			}
-			this.dialog.container.css({left: left, top: top});
 		},
 		/*
 		 * Open the modal dialog elements
 		 * - Note: If you use the onOpen callback, you must "show" the 
 		 *	        overlay and container elements manually 
-		 *         (the iframe will be handled by SimpleModal)
 		 */
 		open: function () {
-			// display the iframe
-			this.dialog.iframe && this.dialog.iframe.show();
-
 			if ($.isFunction(this.opts.onOpen)) {
 				// execute the onOpen callback 
 				this.opts.onOpen.apply(this, [this.dialog]);
@@ -503,7 +327,7 @@
 		/*
 		 * Close the modal dialog
 		 * - Note: If you use an onClose callback, you must remove the 
-		 *         overlay, container and iframe elements manually
+		 *         overlay and container manually
 		 *
 		 * @param {boolean} external Indicates whether the call to this
 		 *     function was internal or external. If it was external, the
@@ -548,7 +372,6 @@
 				// remove the remaining elements
 				this.dialog.container.hide().remove();
 				this.dialog.overlay.hide().remove();
-				this.dialog.iframe && this.dialog.iframe.hide().remove();
 
 				// reset the dialog object
 				this.dialog = {};
