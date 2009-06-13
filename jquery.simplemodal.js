@@ -95,7 +95,6 @@
 	 * SimpleModal default options
 	 * 
 	 * appendTo:		(String:'body') The jQuery selector to append the elements to. For ASP.NET, use 'form'.
-	 * focus:			(Boolean:true) Forces focus to remain on the modal dialog
 	 * opacity:			(Number:50) The opacity value for the overlay div, from 0 - 100
 	 * overlayId:		(String:'simplemodal-overlay') The DOM element id for the overlay div
 	 * overlayCss:		(Object:{}) The CSS styling for the overlay div
@@ -126,7 +125,6 @@
 	 */
 	$.modal.defaults = {
 		appendTo: 'body',
-		focus: true,
 		opacity: 50,
 		overlayId: 'simplemodal-overlay',
 		overlayCss: {},
@@ -323,15 +321,14 @@
 			}
 	
 			// bind keydown events
-			$(document).bind('keydown.simplemodal', function (e) {
-				if (self.opts.focus && e.keyCode == 9) { // TAB
-					self.watchTab(e);
-				}
-				else if ((self.opts.close && self.opts.escClose) && e.keyCode == 27) { // ESC
-					e.preventDefault();
-					self.close();
-				}
-			});
+      if (self.opts.close && self.opts.escClose) {
+        $(document).bind('keydown.simplemodal', function (e) {
+          if (e.keyCode == 27) { // ESC
+            e.preventDefault();
+            self.close();
+          }
+        });
+      }
 
 			// update window size
 			$(window).bind('resize.simplemodal', function () {
@@ -412,14 +409,6 @@
 				}
 			});
 		},
-		focus: function (pos) {
-			var self = this,
-				p = pos || 'first';
-
-			// focus on dialog or the first visible/enabled input element
-			var input = $(':input:enabled:visible:' + p, self.dialog.wrap);
-			input.length > 0 ? input.focus() : self.dialog.wrap.focus();
-		},
 		getDimensions: function () {
 			var el = $(window);
 
@@ -487,27 +476,6 @@
 			}
 			this.dialog.container.css({left: left, top: top});
 		},
-		watchTab: function (e) {
-			var self = this;
-			if ($(e.target).parents('.simplemodal-container').length > 0) {
-				// save the list of inputs
-				self.inputs = $(':input:enabled:visible:first, :input:enabled:visible:last', self.dialog.data);
-
-				// if it's the first or last tabbable element, refocus
-				if (!e.shiftKey && e.target == self.inputs[self.inputs.length -1] ||
-						e.shiftKey && e.target == self.inputs[0] ||
-						self.inputs.length == 0) {
-					e.preventDefault();
-					var pos = e.shiftKey ? 'last' : 'first';
-					setTimeout(function () {self.focus(pos);}, 10);
-				}
-			}
-			else {
-				// might be necessary when custom onShow callback is used
-				e.preventDefault();
-				setTimeout(function () {self.focus();}, 10);
-			}
-		},
 		/*
 		 * Open the modal dialog elements
 		 * - Note: If you use the onOpen callback, you must "show" the 
@@ -529,8 +497,6 @@
 				this.dialog.data.show();
 			}
 			
-			this.focus();
-
 			// bind default events
 			this.bindEvents();
 		},
