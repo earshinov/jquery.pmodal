@@ -98,11 +98,6 @@
 	 * containerCss:	(Object:{}) The CSS styling for the container div
 	 * dataId:			(String:'simplemodal-data') The DOM element id for the data div
 	 * dataCss:			(Object:{}) The CSS styling for the data div
-	 * minHeight:		(Number:200) The minimum height for the container
-	 * minWidth:		(Number:200) The minimum width for the container
-	 * maxHeight:		(Number:null) The maximum height for the container. If not specified, the window height is used.
-	 * maxWidth:		(Number:null) The maximum width for the container. If not specified, the window width is used.
-	 * autoResize:		(Boolean:false) Resize container on window resize? Use with caution - this may have undesirable side-effects.
 	 * zIndex:			(Number: 1000) Starting z-index value
 	 * close:			(Boolean:true) If true, closeHTML, escClose and overClose will be used if set.
 	 							If false, none of them will be used.
@@ -111,11 +106,9 @@
 	 * closeClass:		(String:'simplemodal-close') The CSS class used to bind to the close event
 	 * escClose:		(Boolean:true) Allow Esc keypress to close the dialog? 
 	 * overlayClose:	(Boolean:false) Allow click on overlay to close the dialog?
-	 * position:		(Array:null) Position of container [top, left]. Can be number of pixels or percentage
 	 * persist:			(Boolean:false) Persist the data across modal calls? Only used for existing
 								DOM elements. If true, the data will be maintained across modal calls, if false,
 								the data will be reverted to its original state.
-	 * onOpen:			(Function:null) The callback function used in place of SimpleModal's open
 	 * onShow:			(Function:null) The callback function used after the modal dialog has opened
 	 * onClose:			(Function:null) The callback function used in place of SimpleModal's close
 	 */
@@ -128,20 +121,13 @@
 		containerCss: {},
 		dataId: 'simplemodal-data',
 		dataCss: {},
-		minHeight: 200,
-		minWidth: 300,
-		maxHeight: null,
-		maxWidth: null,
-		autoResize: false,
 		zIndex: 1000,
 		close: true,
 		closeHTML: '<a class="modalCloseImg" title="Close"></a>',
 		closeClass: 'simplemodal-close',
 		escClose: true,
 		overlayClose: false,
-		position: null,
 		persist: false,
-		onOpen: null,
 		onShow: null,
 		onClose: null
 	};
@@ -202,69 +188,41 @@
 				return false;
 			}
 
-			// create the modal overlay and container
+      /* create the modal overlay and container */
 			this.create(data);
-			data = null;
-
-			// display the modal dialog
-			this.open();
-
-			// useful for adding events/manipulating data in the modal dialog
-			if ($.isFunction(this.opts.onShow)) {
-				this.opts.onShow.apply(this, [this.dialog]);
-			}
-
-			// don't break the chain =)
 			return this;
 		},
 		/*
-		 * Create and add the modal overlay and container to the page
+		 * Create
 		 */
 		create: function (data) {
-			// create the overlay
-			this.dialog.overlay = $('<div/>')
-				.attr('id', this.opts.overlayId)
-				.addClass('simplemodal-overlay')
-				.css($.extend(this.opts.overlayCss, {
-					display: 'none',
-					opacity: this.opts.opacity / 100,
-					position: 'fixed',
-					left: 0,
-					top: 0,
-					zIndex: this.opts.zIndex + 1
-				}))
-				.appendTo(this.opts.appendTo);
-		
-			// create the container
-			this.dialog.container = $('<div/>')
-				.attr('id', this.opts.containerId)
-				.addClass('simplemodal-container')
-				.css($.extend(this.opts.containerCss, {
-					display: 'none',
-					position: 'fixed', 
-					zIndex: this.opts.zIndex + 2
-				}))
-				.append(this.opts.close && this.opts.closeHTML
-					? $(this.opts.closeHTML).addClass(this.opts.closeClass)
-					: '')
-				.appendTo(this.opts.appendTo);
-				
-			this.dialog.wrap = $('<div/>')
-				.attr('tabIndex', -1)
-				.addClass('simplemodal-wrap')
-				.css({height: '100%', outline: 0, width: '100%'})
-				.appendTo(this.dialog.container);
-				
-			// add styling and attributes to the data
-			this.dialog.data = data
-				.attr('id', data.attr('id') || this.opts.dataId)
-				.addClass('simplemodal-data')
-				.css($.extend(this.opts.dataCss, {
-						display: 'none'
-				}));
-			data = null;
+      var $overlay_deco = $(document.createElement('div'))
+        .addClass('pmodal-overlay-decorator')
+        .appendTo(this.opts.appendTo);
+      var $overlay = $(document.createElement('div'))
+        .addClass('pmodal-overlay')
+        .appendTo(this.opts.appendTo);
+      var $container = $(document.createElement('table'))
+        .attr('cellspacing', '0')
+        .addClass('pmodal-container')
+        .appendTo($overlay);
+      var $tr = $(document.createElement('tr'))
+        .appendTo($container);
+      var $dialog = $(document.createElement('div'))
+        .addClass('pmodal-dialog')
+        .appendTo($tr);
+      data.appendTo($dialog);
 
-			this.dialog.data.appendTo(this.dialog.wrap);
+      if ($.isFunction(this.opts.onShow)) {
+				this.opts.onShow.apply(this, [this.dialog]);
+			}
+      data.show();
+
+      this.dialog.overlay_deco = $overlay_deco;
+      this.dialog.overlay = $overlay;
+      this.dialog.data = data;
+
+      this.bindEvents();
 		},
 		/*
 		 * Bind events
@@ -303,26 +261,6 @@
 			$('.' + this.opts.closeClass).unbind('click.simplemodal');
 			$(document).unbind('keydown.simplemodal');
 			this.dialog.overlay.unbind('click.simplemodal');
-		},
-		/*
-		 * Open the modal dialog elements
-		 * - Note: If you use the onOpen callback, you must "show" the 
-		 *	        overlay and container elements manually 
-		 */
-		open: function () {
-			if ($.isFunction(this.opts.onOpen)) {
-				// execute the onOpen callback 
-				this.opts.onOpen.apply(this, [this.dialog]);
-			}
-			else {
-				// display the remaining elements
-				this.dialog.overlay.show();
-				this.dialog.container.show();
-				this.dialog.data.show();
-			}
-			
-			// bind default events
-			this.bindEvents();
 		},
 		/*
 		 * Close the modal dialog
@@ -370,7 +308,7 @@
 				}
 
 				// remove the remaining elements
-				this.dialog.container.hide().remove();
+				this.dialog.overlay_deco.hide().remove();
 				this.dialog.overlay.hide().remove();
 
 				// reset the dialog object

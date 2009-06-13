@@ -1,0 +1,44 @@
+.pmodal-overlay-decorator {
+  background:#024;
+  height:100%;
+  width:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  opacity:0.8;
+  z-index:2000;
+  *display:none;
+}
+.pmodal-overlay {
+  height:100%;
+  width:100%;
+  display:block;
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:2001;
+  overflow:auto;
+  
+  *zoom:1;
+  /* (0.8 * 255).toString(16) = cc */
+  *filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#cc002244,endColorstr=#cc002244);
+  *background:transparent url(pixel.gif);
+}
+.pmodal-container {
+  z-index:2001;
+  position:relative;
+  margin:0 auto;
+  height:100%;
+  vertical-align:middle;
+  width:300px;
+  z-index:9999;
+  
+  *text-align:center;
+  *position:static;
+}
+.pmodal-dialog {
+  vertical-align:middle;
+
+  *text-align:left;
+  *zoom:1;
+}
