@@ -98,7 +98,6 @@
 	 * containerCss:	(Object:{}) The CSS styling for the container div
 	 * dataId:			(String:'simplemodal-data') The DOM element id for the data div
 	 * dataCss:			(Object:{}) The CSS styling for the data div
-	 * zIndex:			(Number: 1000) Starting z-index value
 	 * close:			(Boolean:true) If true, closeHTML, escClose and overClose will be used if set.
 	 							If false, none of them will be used.
 	 * closeHTML:		(String:'<a class="modalCloseImg" title="Close"></a>') The HTML for the 
@@ -121,7 +120,6 @@
 		containerCss: {},
 		dataId: 'simplemodal-data',
 		dataCss: {},
-		zIndex: 1000,
 		close: true,
 		closeHTML: '<a class="modalCloseImg" title="Close"></a>',
 		closeClass: 'simplemodal-close',
@@ -156,9 +154,6 @@
 
 			// merge defaults and user options
 			this.opts = $.extend({}, $.modal.defaults, options);
-
-			// keep track of z-index
-			this.zIndex = this.opts.zIndex;
 
 			// set the onClose callback flag
 			this.occb = false;
