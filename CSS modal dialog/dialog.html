@@ -34,7 +34,6 @@
 		z-index:2001;
 		
 		overflow:auto;
-		*overflow-x:hidden;
 		*zoom:1;
 		/* (0.8 * 255).toString(16) = cc */
 		*filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#cc002244,endColorstr=#cc002244);
@@ -44,36 +43,19 @@
 		z-index:2001;
 		position:relative;
 		margin:0 auto;
-		display:table;
 		height:100%;
 		vertical-align:middle;
 		width:300px;
 		z-index:9999;
 		
-		*width:100%;
 		*text-align:center;
 		*position:static;
-		*display:block;
 	}
 	.dialog-wrap {
-		display:table-cell;
 		vertical-align:middle;
-		
-		*width:300px;
+
 		*text-align:left;
 		*zoom:1;
-		*display:inline;
-	}
-	
-	.dialog-decorator {
-		display:none;
-		
-		*vertical-align:middle;
-		*zoom:1;
-		*display:inline;
-		*height:100%;
-		*width:0;
-		*background:red;
 	}
 	
 	#body {
@@ -117,24 +99,25 @@
 <div id="modal">
 	<div class="overlay-decorator"></div>
 	<div class="overlay-wrap">
-		<div class="overlay">
-			<div class="dialog-decorator"></div>
-			<div class="dialog-wrap">
-				<div tabindex="-1" class="dialog" id="dialog">
-					<div class="content">
-						<h2>Modal Dialog</h2>
-						<p>Works in IE, Safari, Firefox, and Opera properly.</p>
-						<p>When the viewport is too small, a scrollbar appears to let you see the entire modal.</p>
-						<p>Text doesn't shift left and right when the modal shows or hides.</p>
-						<p>You should not be able to tab off of the modal, or scroll the body content.</p>
-						<p>Type "M" to toggle the modal.  Focus should return to wherever it was before the modal showed.</p>
-						<p>Thanks to <a href="http://www.hedgerwow.com/">Hedger</a> and <a href="http://www.hedgerwow.com/temp/css-vertical-align-center-overlay.html">his vertical-centering in IE approach</a>.</p>
-						<p><a href="http://foohack.com/2007/11/css-modal-dialog-that-works-right/?preview=true">Blog post on foohack about this thing</a></p>
-						<p>This is the end of the modal dialog</p>
+		<table class="overlay" cellspacing="0">
+			<tr>
+				<td class="dialog-wrap">
+					<div tabindex="-1" class="dialog" id="dialog">
+						<div class="content">
+							<h2>Modal Dialog</h2>
+							<p>Works in IE, Safari, Firefox, and Opera properly.</p>
+							<p>When the viewport is too small, a scrollbar appears to let you see the entire modal.</p>
+							<p>Text doesn't shift left and right when the modal shows or hides.</p>
+							<p>You should not be able to tab off of the modal, or scroll the body content.</p>
+							<p>Type "M" to toggle the modal.  Focus should return to wherever it was before the modal showed.</p>
+							<p>Thanks to <a href="http://www.hedgerwow.com/">Hedger</a> and <a href="http://www.hedgerwow.com/temp/css-vertical-align-center-overlay.html">his vertical-centering in IE approach</a>.</p>
+							<p><a href="http://foohack.com/2007/11/css-modal-dialog-that-works-right/?preview=true">Blog post on foohack about this thing</a></p>
+							<p>This is the end of the modal dialog</p>
+						</div>
 					</div>
-				</div>
-			</div>
-		</div>
+				</td>
+			</tr>
+		</table>
 	</div>
 </div>
 
