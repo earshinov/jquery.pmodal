@@ -298,19 +298,21 @@
     create: function (data) {
       var body = $('body');
       var ie = $.browser.msie && parseInt($.browser.version, 10) < 8;
-      var $overlays = $([]);
 
-      if (!ie)
-        $overlays = $overlays.add(
-          $(document.createElement('div'))
-            .addClass('pmodal-overlay-decorator')
-            .css({
-              'background-color': '#' + this.opts.background_color,
-              'display': 'none',
-              'opacity': this.opts.opacity
-            })
-            .appendTo(body)
-        );
+      $overlay_deco = $(document.createElement('div'))
+        .addClass('pmodal-overlay-decorator')
+        .css({
+          'background-color': '#' + this.opts.background_color,
+          'display': 'none',
+          'opacity': this.opts.opacity
+        })
+        .appendTo(body);
+
+      // add an iframe to prevent <select> elements from bleeding through
+      if (ie)
+        $(document.createElement('iframe'))
+          .addClass('pmodal-iframe')
+          .appendTo($overlay_deco);
 
       var $overlay = $(document.createElement('div'))
         .addClass('pmodal-overlay')
@@ -322,7 +324,6 @@
         var filter = 'progid:DXImageTransform.Microsoft.gradient(startColorstr=#' + clr + ',endColorstr=#' + clr + ');'
 		    $overlay.css('filter', filter);
       }
-      $overlays = $overlays.add($overlay);
 
       var $container = $(document.createElement('table'))
         .attr('cellspacing', '0')
@@ -335,14 +336,14 @@
         .appendTo($tr);
       data.appendTo($dialog);
 
-      this.dialog.overlays = $overlays;
+      this.dialog.overlays = $overlay_deco.add($overlay);
       this.dialog.data = data;
 
       if ($.isFunction(this.opts.onOpen))
         this.opts.onOpen.apply(this, [this.dialog]);
       else {
-        $overlays.show();
-        data.show();
+        this.dialog.overlays.show();
+        this.dialog.data.show();
       }
 
       if ($.isFunction(this.opts.onShow))
