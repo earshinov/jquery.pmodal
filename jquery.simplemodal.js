@@ -203,7 +203,7 @@
         .appendTo($overlay);
       var $tr = $(document.createElement('tr'))
         .appendTo($container);
-      var $dialog = $(document.createElement('div'))
+      var $dialog = $(document.createElement('td'))
         .addClass('pmodal-dialog')
         .appendTo($tr);
       data.appendTo($dialog);
