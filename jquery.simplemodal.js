@@ -205,16 +205,15 @@
         .appendTo($tr);
       data.appendTo($dialog);
 
-      if ($.isFunction(this.opts.onShow)) {
-				this.opts.onShow.apply(this, [this.dialog]);
-			}
-      data.show();
-
       this.dialog.overlay_deco = $overlay_deco;
       this.dialog.overlay = $overlay;
       this.dialog.data = data;
 
+      if ($.isFunction(this.opts.onShow))
+        this.opts.onShow.apply(this, [this.dialog]);
+
       this.bindEvents();
+      data.show();
 		},
 		/*
 		 * Bind events
