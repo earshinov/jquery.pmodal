@@ -100,8 +100,6 @@
 	 * dataCss:			(Object:{}) The CSS styling for the data div
 	 * close:			(Boolean:true) If true, closeHTML, escClose and overClose will be used if set.
 	 							If false, none of them will be used.
-	 * closeHTML:		(String:'<a class="modalCloseImg" title="Close"></a>') The HTML for the 
-							default close link. SimpleModal will automatically add the closeClass to this element.
 	 * closeClass:		(String:'simplemodal-close') The CSS class used to bind to the close event
 	 * escClose:		(Boolean:true) Allow Esc keypress to close the dialog? 
 	 * overlayClose:	(Boolean:false) Allow click on overlay to close the dialog?
@@ -121,7 +119,6 @@
 		dataId: 'simplemodal-data',
 		dataCss: {},
 		close: true,
-		closeHTML: '<a class="modalCloseImg" title="Close"></a>',
 		closeClass: 'simplemodal-close',
 		escClose: true,
 		overlayClose: false,
