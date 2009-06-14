@@ -107,6 +107,7 @@
 								DOM elements. If true, the data will be maintained across modal calls, if false,
 								the data will be reverted to its original state.
 	 * onShow:			(Function:null) The callback function used after the modal dialog has opened
+	 * onOpen:			(Function:null) The callback function used in place of SimpleModal's open
 	 * onClose:			(Function:null) The callback function used in place of SimpleModal's close
 	 */
 	$.modal.defaults = {
@@ -124,6 +125,7 @@
 		overlayClose: false,
 		persist: false,
 		onShow: null,
+		onOpen: null,
 		onClose: null
 	};
 
@@ -209,11 +211,15 @@
       this.dialog.overlay = $overlay;
       this.dialog.data = data;
 
+      if ($.isFunction(this.opts.onOpen))
+        this.opts.onOpen.apply(this, [this.dialog]);
+      else
+        data.show();
+
       if ($.isFunction(this.opts.onShow))
         this.opts.onShow.apply(this, [this.dialog]);
 
       this.bindEvents();
-      data.show();
 		},
 		/*
 		 * Bind events
