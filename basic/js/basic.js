@@ -15,6 +15,6 @@
 $(document).ready(function () {
 	$('#basicModal input.basic, #basicModal a.basic').click(function (e) {
 		e.preventDefault();
-		$('#basicModalContent').modal({closeClass: 'close'});
+		$('#basicModalContent').modal();
 	});
 });

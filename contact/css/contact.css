@@ -12,7 +12,7 @@
  *
  */
 
-#contact {width:450px; font-family:'Trebuchet MS', Verdana, Arial; font-size:16px; text-align:left;}
+#contact {width:450px; font-family:'Trebuchet MS', Verdana, Arial; font-size:16px; text-align:left; position:relative;}
 #contact .contact-content {background-color:#333; color:#ddd; height:40px;}
 #contact h1 {color:#d76300; margin:0; padding:0 0 6px 12px; font-size:1.2em; text-align:left;}
 #contact .contact-loading {position:absolute; background:url(../img/contact/loading.gif) no-repeat; z-index:8000; height:55px; width:54px; margin:-14px 0 0 170px; padding:0;}

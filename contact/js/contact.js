@@ -18,7 +18,7 @@ $(document).ready(function () {
 
 		data=" \
 <div id='contact' style='display:none'> \
-<a href='#' title='Close' class='modalCloseX simplemodal-close'>x</a> \
+<a href='#' title='Close' class='modalCloseX pmodal-close'>x</a> \
 <div class='contact-top'></div> \
 <div class='contact-content'> \
 <h1 class='contact-title'>Send us a message:</h1> \
@@ -44,7 +44,7 @@ $(document).ready(function () {
 \
 <label>&nbsp;</label> \
 <button type='submit' class='contact-send contact-button' tabindex='1006'>Send</button> \
-<button type='submit' class='contact-cancel contact-button simplemodal-close' tabindex='1007'>Cancel</button> \
+<button type='submit' class='contact-cancel contact-button pmodal-close' tabindex='1007'>Cancel</button> \
 <br/> \
 \
 </form> \
@@ -95,31 +95,33 @@ var contact = {
 
 		var title = $('#contact .contact-title').html();
 		$('#contact .contact-title').html('Loading...');
-		dialog.data.fadeIn(200, function () {
-			$('#contact .contact-content').animate({
-				height: h
-			}, function () {
-				$('#contact .contact-title').html(title);
-				$('#contact form').fadeIn(200, function () {
-					$('#contact #contact-name').focus();
+		dialog.overlays.fadeIn(200, function () {
+			dialog.data.fadeIn(200, function () {
+				$('#contact .contact-content').animate({
+					height: h
+				}, function () {
+					$('#contact .contact-title').html(title);
+					$('#contact form').fadeIn(200, function () {
+						$('#contact #contact-name').focus();
 
-					$('#contact .contact-cc').click(function () {
-						var cc = $('#contact #contact-cc');
-						cc.is(':checked') ? cc.attr('checked', '') : cc.attr('checked', 'checked');
-					});
-
-					// fix png's for IE 6
-					if ($.browser.msie && $.browser.version < 7) {
-						$('#contact .contact-button').each(function () {
-							if ($(this).css('backgroundImage').match(/^url[("']+(.*\.png)[)"']+$/i)) {
-								var src = RegExp.$1;
-								$(this).css({
-									backgroundImage: 'none',
-									filter: 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' +  src + '", sizingMethod="crop")'
-								});
-							}
+						$('#contact .contact-cc').click(function () {
+							var cc = $('#contact #contact-cc');
+							cc.is(':checked') ? cc.attr('checked', '') : cc.attr('checked', 'checked');
 						});
-					}
+
+						// fix png's for IE 6
+						if ($.browser.msie && $.browser.version < 7) {
+							$('#contact .contact-button').each(function () {
+								if ($(this).css('backgroundImage').match(/^url[("']+(.*\.png)[)"']+$/i)) {
+									var src = RegExp.$1;
+									$(this).css({
+										backgroundImage: 'none',
+										filter: 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' +  src + '", sizingMethod="crop")'
+									});
+								}
+							});
+						}
+					});
 				});
 			});
 		});
@@ -181,7 +183,9 @@ var contact = {
 			height: 40
 		}, function () {
 			dialog.data.fadeOut(200, function () {
-				$.modal.close();
+				dialog.data.fadeOut(200, function () {
+					$.modal.close();
+				});
 			});
 		});
 	},
