@@ -1,4 +1,4 @@
-.pmodal-html, .pmodal-body {
+html.pmodal-html, body.pmodal-body {
   height: 100%;
   width: 100%;
   margin: 0;
@@ -6,7 +6,7 @@
   overflow: hidden;
 }
 
-.pmodal-content {
+div.pmodal-content {
   overflow: auto;
   height: 100%;
   width: 100%;
@@ -16,7 +16,7 @@
 
 /* ------------------------------------------------------------------------- */
 
-.pmodal-overlay-decorator {
+div.pmodal-overlay-decorator {
   height: 100%;
   width: 100%;
   position: absolute;
@@ -34,7 +34,7 @@
    */
 }
 
-.pmodal-overlay {
+div.pmodal-overlay {
   height: 100%;
   width: 100%;
   position: absolute;
@@ -52,7 +52,7 @@
    */
 }
 
-.pmodal-container {
+table.pmodal-container {
   z-index: 2002;
   position: relative;
   margin: 0 auto;
@@ -65,7 +65,7 @@
   *position: static;
 }
 
-.pmodal-dialog {
+td.pmodal-dialog {
   vertical-align: middle;
 
   *text-align: left;
