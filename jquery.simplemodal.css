@@ -16,6 +16,14 @@ div.pmodal-content {
 
 /* ------------------------------------------------------------------------- */
 
+/*
+ * CSS classes 'pmodal-overlay-decorator' and 'pmodal-iframe' are used
+ * in IE to prevent select options from bleeding through.
+ *
+ * http://anton-egorov.blogspot.com/2007/11/ie-select-z-index.html
+ * http://www.hedgerwow.com/360/bugs/css-select-free.html
+ */
+
 div.pmodal-overlay-decorator {
   height: 100%;
   width: 100%;
@@ -29,9 +37,19 @@ div.pmodal-overlay-decorator {
    * to 'style' attribute dynamically with JavaScript.
    */
 
-  /*
-   * 'div' element with this class is not used in IE.
-   */
+  *overflow: hidden;
+}
+
+iframe.pmodal-iframe {
+  display:none;/*sorry for IE5*/
+  display/**/:block;/*sorry for IE5*/
+  position:absolute;/*must have*/
+  top:0;/*must have*/
+  left:0;/*must have*/
+  z-index:-1;/*must have*/
+  filter:mask();/*must have*/
+  width:3000px;/*must have for any big value*/
+  height:3000px/*must have for any big value*/;
 }
 
 div.pmodal-overlay {
