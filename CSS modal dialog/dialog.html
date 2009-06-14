@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html tabindex="-1" lang="en"><head>
+<html lang="en"><head>
 
 
 
@@ -61,7 +61,7 @@
 		<table class="pmodal-container" cellspacing="0">
 			<tr>
 				<td class="pmodal-dialog">
-					<div tabindex="-1" class="dialog" id="dialog">
+					<div class="dialog" id="dialog">
 						<div class="content">
 							<h2>Modal Dialog</h2>
 							<p>Works in IE, Safari, Firefox, and Opera properly.</p>
@@ -80,7 +80,7 @@
 	</div>
 </div>
 
-<div tabindex="-1" id="body">
+<div id="body">
 	<div id="doc">
 		<h2>This is the body content</h2>
 
@@ -355,14 +355,9 @@ luctus et ultrices posuere cubilia Curae; </p></div>
 (function () {
 
 var dialog = document.getElementById('dialog');
-var body = document.getElementById('body');
 var html = document.documentElement;
 
 var modalShowing = (html.className === 'modal');
-
-html.tabIndex = -1;
-dialog.tabIndex = -1;
-body.tabIndex = -1;
 
 window.onunload = function () {
 	dialog = body = html = null;
