@@ -30,25 +30,27 @@
 <![endif]-->
 
 </head><body>
+<div id="body">
 <div id="container">
 	<div id="header"><h1>SimpleModal Tests</h1></div>
 	<div id="content">
 	<ul>
 		<li><a href="#" id="test1">Chained Function - default options</a> <pre><code>$('#modalContentTest').modal();</code></pre></li>
 		<li><a href="#" id="test2">Modal Function w/ jQuery DOM attached element - default options</a> <pre><code>$.modal($('#modalContentTest'));</code></pre></li>
-		<li><a href="#" id="test3">Chained Function w/ jQuery DOM unattached element - default options</a> <pre><code>$('&lt;div&gt;&lt;h1&gt;New DOM Element&lt;/h1&gt;&lt;/div&gt;').modal();</code></pre></li>
+		<li><a href="#" id="test3">Chained Function w/ jQuery DOM unattached element - default options</a> <pre><code>$('&lt;div class="dialog"&gt;&lt;a href="#" class="pmodal-close"/&gt;&lt;h1&gt;New DOM Element&lt;/h1&gt;&lt;/div&gt;').modal();</code></pre></li>
 		<li><a href="#" id="test4">Modal Function w/ DOM element - default options</a> <pre><code>$.modal(document.getElementById('modalContentTest'));</code></pre></li>
-		<li><a href="#" id="test5">Modal Function w/ HTML - default options</a> <pre><code>$.modal("&lt;div class='test'&gt;\
+		<li><a href="#" id="test5">Modal Function w/ HTML - default options</a> <pre><code>$.modal($("&lt;div class='test dialog'&gt;\
+		&lt;a href='#' class='pmodal-close'/&gt;\
 		&lt;h1&gt;Sample Content&lt;/h1&gt;\
 		&lt;p&gt;This can be complex HTML containing &lt;a href='#'&gt;links&lt;/a&gt;,\
 		&lt;input type='text' value='input boxes' size='8'/&gt;, etc...&lt;/p&gt;\
-	 &lt;/div&gt;");</code></pre></li>
-		<li><a href="#" id="test6">Modal Function w/ string - default options</a> <pre><code>$.modal("Sample Content - just a plain 'ol string");</code></pre></li>
-		<li><a href="#" id="test7">Modal Function w/ string/HTML - close: false</a> <pre><code>$.modal("&lt;div class='test'&gt;\
+	 &lt;/div&gt;"));</code></pre></li>
+		<li><a href="#" id="test7">Modal Function w/ HTML - close: false</a> <pre><code>$.modal($("&lt;div class='test dialog'&gt;\
+		&lt;a href='#' class='pmodal-close'/&gt;\
 		&lt;h1&gt;Sample Content&lt;/h1&gt;\
 		&lt;p&gt;This example uses a custom close.&lt;/p&gt;\
 		&lt;p&gt;&lt;a href='#' class='simplemodal-close'&gt;Close&lt;/a&gt;&lt;/p&gt;\
-	 &lt;/div&gt;", {close: false});</code></pre></li>
+	 &lt;/div&gt;"), {close: false});</code></pre></li>
 		<li><a href="#" id="test8">Chained Function w/ DOM element - persist: true</a> <pre><code>$('#modalContentPersistTest').modal({persist: true});</code></pre></li>
 		<li><a href="#" id="test9">onOpen callback function - onOpen: function</a> <pre><code>$('#modalContentTest').modal({onOpen: modalOpen});</code></pre>
 	<pre><code>/**
@@ -59,13 +61,9 @@
  * and data.
  */
 function modalOpen (dialog) {
-	dialog.overlay.fadeIn('slow', function () {
-		dialog.container.fadeIn('slow', function () {
-			dialog.data.hide().slideDown('slow');	 
-		});
-	});
+	dialog.data.hide().slideDown('slow');
 }</code></pre></li>
-		<li><a href="#" id="test10">onClose callback function - onClose: function</a> <pre><code>$('#modalContentTest').modal({onClose: simplemodal-close});</code></pre>
+		<li><a href="#" id="test10">onClose callback function - onClose: function</a> <pre><code>$('#modalContentTest').modal({onClose: modalClose});</code></pre>
 	<pre><code>/**
  * When the close event is called, this function will be used to 'close'
  * the overlay, container and data portions of the modal dialog.
@@ -76,13 +74,9 @@ function modalOpen (dialog) {
  * onClose callbacks need to handle 'closing' the overlay, container
  * and data.
  */
-function simplemodal-close (dialog) {
+function modalClose (dialog) {
 	dialog.data.fadeOut('slow', function () {
-		dialog.container.hide('slow', function () {
-			dialog.overlay.slideUp('slow', function () {
-				$.modal.close();
-			});
-		});
+		$.modal.close();
 	});
 }</code></pre></li>
 		<li><a href="#" id="test11">onShow callback function - onShow: function</a> <pre><code>$('#modalContentTest').modal({onShow: modalShow});</code></pre>
@@ -114,31 +108,12 @@ function modalShow (dialog) {
 		</form>
 		</div>
 	</li>
-	<li><a href="#" id="test13">Position test (both) - position: [20,20]</a> <pre><code>$('#modalContentTest').modal({position: [20,20]});</code></pre></li>
-	<li><a href="#" id="test14">Position test (top only) - position: [20,]</a> <pre><code>$('#modalContentTest').modal({position: [20,]});</code></pre></li>
-	<li><a href="#" id="test15">Position test (left only) - position: [,20]</a> <pre><code>$('#modalContentTest').modal({position: [,20]});</code></pre></li>
-	<li><a href="#" id="test16">Position test (px) - position: ["40px","40px"]</a> <pre><code>$('#modalContentTest').modal({position: ["40px","40px"]});</code></pre></li>
-	<li><a href="#" id="test17">Position test (%) - position: ["25%","25%"]</a> <pre><code>$('#modalContentTest').modal({position: ["25%","25%"]});</code></pre></li>
-	<li><a href="#" id="test18">Horizontal test</a> <pre><code>$('#modalContentTest').modal();</code></pre>
-	<div style="width: 200%;">Wide Content - test horizontal scrolling</div>
-	</li>
-	<li>Doctypes:
-	  <ul>
-	    <li><a href="http://www.ericmmartin.com/simplemodal-test/quirksmode.html">quirksmode</a></li>
-		<li><a href="http://www.ericmmartin.com/simplemodal-test/html-4.01-frameset.html">html-4.01-frameset</a></li>
-		<li><a href="http://www.ericmmartin.com/simplemodal-test/html-4.01-strict.html">html-4.01-strict.html</a></li>
-		<li><a href="http://www.ericmmartin.com/simplemodal-test/html-4.01-transitional.html">html-4.01-transitional</a></li>
-		<li><a href="http://www.ericmmartin.com/simplemodal-test/xhtml-1.0-frameset.html">xhtml-1.0-frameset</a></li>
-		<li><a href="http://www.ericmmartin.com/simplemodal-test/xhtml-1.0-strict.html">xhtml-1.0-strict</a></li>
-		<li><a href="http://www.ericmmartin.com/simplemodal-test/xhtml-1.0-transitional.html">xhtml-1.0-transitional</a></li>
-		<li><a href="http://www.ericmmartin.com/simplemodal-test/xhtml-1.1.html">xhtml-1.1</a></li>
-	  </ul>
-	</li>
 	</ul>
 	</div>
 	<div style="height: 200px;">&nbsp;</div>
 </div>
-<div id="modalContentTest" style="display: none;">
+<div id="modalContentTest" class="dialog" style="display: none;">
+	<a href='#' class='pmodal-close'></a>
 	<form action="#">
 	<textarea rows="5" cols="30"></textarea><br>
 	<select>
@@ -150,10 +125,11 @@ function modalShow (dialog) {
 	</select><br>
 	<input type="text"><br>
 	<input value="button" class="animate" type="button"><br>
-	<input value="close" class="simplemodal-close" type="button"><br>
+	<input value="close" class="pmodal-close" type="button"><br>
 	</form>
 </div>
-<div id="modalContentPersistTest" style="display: none;">
+<div id="modalContentPersistTest" class="dialog" style="display: none;">
+	<a href='#' class='pmodal-close'></a>
 	<p>Enter values in the textarea and text field, then close the dialog. When you re-run the test, the data will still be there.</p>
 	<form action="#">
 	<textarea rows="5" cols="30"></textarea><br>
@@ -162,7 +138,8 @@ function modalShow (dialog) {
 	Radio Buttons: <input name="group" value="1" type="radio"> <input name="group" value="2" type="radio"> <input name="group" value="3" type="radio"><br>
 	Check Boxes: <input name="option1" value="1" type="checkbox"> <input name="option2" value="2" type="checkbox"> <input name="options3" value="3" type="checkbox"><br>
 	<br>
-	<input value="close" class="simplemodal-close" type="button"><br>
+	<input value="close" class="pmodal-close" type="button"><br>
 	</form>
+</div>
 </div>
 </body></html>

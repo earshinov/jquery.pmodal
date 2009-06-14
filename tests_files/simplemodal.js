@@ -19,7 +19,7 @@ $(document).ready(function () {
 	});
 	$('a#test3').click(function (e) {
 		e.preventDefault();
-		$('<div><h1>New DOM Element</h1></div>').modal();
+		$('<div class="dialog"><a href="#" class="pmodal-close"/><h1>New DOM Element</h1></div>').modal();
 	});
 	$('a#test4').click(function (e) {
 		e.preventDefault();
@@ -27,23 +27,21 @@ $(document).ready(function () {
 	});
 	$('a#test5').click(function (e) {
 		e.preventDefault();
-		$.modal("<div class='test'>\
+		$.modal($("<div class='test dialog'>\
+					<a href='#' class='pmodal-close'/>\
 					<h1>Sample Content</h1>\
 					<p>This can be complex HTML containing <a href='#'>links</a>,\
 					<input type='text' value='input boxes' size='8'/>, etc...</p>\
-				</div>");
-	});
-	$('a#test6').click(function (e) {
-		e.preventDefault();
-		$.modal("Sample Content - just a plain 'ol string");
+				</div>"));
 	});
 	$('a#test7').click(function (e) {
 		e.preventDefault();
-		$.modal("<div class='test'>\
+		$.modal($("<div class='test dialog'>\
+					<a href='#' class='pmodal-close'/>\
 					<h1>Sample Content</h1>\
 					<p>This example uses a custom close.</p>\
 					<p><a href='#' class='simplemodal-close'>Close</a></p>\
-				</div>", {close:false});
+				</div>"), {close:false});
 	});
 	$('a#test8').click(function (e) {
 		e.preventDefault();
@@ -63,31 +61,7 @@ $(document).ready(function () {
 	});
 	$('a#test12').click(function (e) {
 		e.preventDefault();
-		$.modal('<div class="test"><h1>IE SELECT bleed test</h1></div>');
-	});
-	$('a#test13').click(function (e) {
-		e.preventDefault();
-		$('#modalContentTest').modal({position: [20,20]});
-	});
-	$('a#test14').click(function (e) {
-		e.preventDefault();
-		$('#modalContentTest').modal({position: [20,]});
-	});
-	$('a#test15').click(function (e) {
-		e.preventDefault();
-		$('#modalContentTest').modal({position: [,20]});
-	});
-	$('a#test16').click(function (e) {
-		e.preventDefault();
-		$('#modalContentTest').modal({position: ["40px","40px"]});
-	});
-	$('a#test17').click(function (e) {
-		e.preventDefault();
-		$('#modalContentTest').modal({position: ["25%","25%"]});
-	});
-	$('a#test18').click(function (e) {
-		e.preventDefault();
-		$('#modalContentTest').modal();
+		$.modal($('<div class="test dialog"><a href="#" class="pmodal-close"/><h1>IE SELECT bleed test</h1></div>'));
 	});
 });
 
@@ -99,11 +73,7 @@ $(document).ready(function () {
  * and data.
  */
 function modalOpen (dialog) {
-	dialog.overlay.fadeIn('slow', function () {
-		dialog.container.fadeIn('slow', function () {
-			dialog.data.slideDown('slow');
-		});
-	});
+	dialog.data.slideDown('slow');
 }
 
 /**
@@ -118,11 +88,7 @@ function modalOpen (dialog) {
  */
 function modalClose (dialog) {
 	dialog.data.fadeOut('slow', function () {
-		dialog.container.hide('slow', function () {
-			dialog.overlay.slideUp('slow', function () {
-				$.modal.close();
-			});
-		});
+		$.modal.close();
 	});
 }
 
