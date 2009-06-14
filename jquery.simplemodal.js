@@ -100,7 +100,7 @@
 	 * dataCss:			(Object:{}) The CSS styling for the data div
 	 * close:			(Boolean:true) If true, closeHTML, escClose and overClose will be used if set.
 	 							If false, none of them will be used.
-	 * closeClass:		(String:'simplemodal-close') The CSS class used to bind to the close event
+	 * closeClass:		(String:'pmodal-close') The CSS class used to bind to the close event
 	 * escClose:		(Boolean:true) Allow Esc keypress to close the dialog? 
 	 * overlayClose:	(Boolean:false) Allow click on overlay to close the dialog?
 	 * persist:			(Boolean:false) Persist the data across modal calls? Only used for existing
@@ -120,7 +120,7 @@
 		dataId: 'simplemodal-data',
 		dataCss: {},
 		close: true,
-		closeClass: 'simplemodal-close',
+		closeClass: 'pmodal-close',
 		escClose: true,
 		overlayClose: false,
 		persist: false,
