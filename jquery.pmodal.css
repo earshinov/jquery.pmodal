@@ -1,4 +1,22 @@
-.pmodal-overlay-decorator {
+html.pmodal-html, body.pmodal-body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+div.pmodal-content {
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------------- */
+
+div.pmodal-overlay-decorator {
   height: 100%;
   width: 100%;
   position: absolute;
@@ -16,7 +34,7 @@
    */
 }
 
-.pmodal-overlay {
+div.pmodal-overlay {
   height: 100%;
   width: 100%;
   position: absolute;
@@ -34,7 +52,7 @@
    */
 }
 
-.pmodal-container {
+table.pmodal-container {
   z-index: 2002;
   position: relative;
   margin: 0 auto;
@@ -47,12 +65,14 @@
   *position: static;
 }
 
-.pmodal-dialog {
+td.pmodal-dialog {
   vertical-align: middle;
 
   *text-align: left;
   *zoom: 1;
 }
+
+/* ------------------------------------------------------------------------- */
 
 .pmodal-close-image {
   position: absolute;
