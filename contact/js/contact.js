@@ -17,7 +17,7 @@ $(document).ready(function () {
 		e.preventDefault();
 
 		data=" \
-<div style='display:none'> \
+<div id='contact' style='display:none'> \
 <a href='#' title='Close' class='modalCloseX simplemodal-close'>x</a> \
 <div class='contact-top'></div> \
 <div class='contact-content'> \
@@ -54,9 +54,6 @@ $(document).ready(function () {
 
 		$(data).modal({
 			close: false,
-			position: ["15%",],
-			overlayId: 'contact-overlay',
-			containerId: 'contact-container',
 			onOpen: contact.open,
 			onShow: contact.show,
 			onClose: contact.close
@@ -76,13 +73,13 @@ var contact = {
 	open: function (dialog) {
 		// add padding to the buttons in firefox/mozilla
 		if ($.browser.mozilla) {
-			$('#contact-container .contact-button').css({
+			$('#contact .contact-button').css({
 				'padding-bottom': '2px'
 			});
 		}
 		// input field font size
 		if ($.browser.safari) {
-			$('#contact-container .contact-input').css({
+			$('#contact .contact-input').css({
 				'font-size': '.9em'
 			});
 		}
@@ -96,65 +93,61 @@ var contact = {
 			h += 22;
 		}
 
-		var title = $('#contact-container .contact-title').html();
-		$('#contact-container .contact-title').html('Loading...');
-		dialog.overlay.fadeIn(200, function () {
-			dialog.container.fadeIn(200, function () {
-				dialog.data.fadeIn(200, function () {
-					$('#contact-container .contact-content').animate({
-						height: h
-					}, function () {
-						$('#contact-container .contact-title').html(title);
-						$('#contact-container form').fadeIn(200, function () {
-							$('#contact-container #contact-name').focus();
+		var title = $('#contact .contact-title').html();
+		$('#contact .contact-title').html('Loading...');
+		dialog.data.fadeIn(200, function () {
+			$('#contact .contact-content').animate({
+				height: h
+			}, function () {
+				$('#contact .contact-title').html(title);
+				$('#contact form').fadeIn(200, function () {
+					$('#contact #contact-name').focus();
 
-							$('#contact-container .contact-cc').click(function () {
-								var cc = $('#contact-container #contact-cc');
-								cc.is(':checked') ? cc.attr('checked', '') : cc.attr('checked', 'checked');
-							});
+					$('#contact .contact-cc').click(function () {
+						var cc = $('#contact #contact-cc');
+						cc.is(':checked') ? cc.attr('checked', '') : cc.attr('checked', 'checked');
+					});
 
-							// fix png's for IE 6
-							if ($.browser.msie && $.browser.version < 7) {
-								$('#contact-container .contact-button').each(function () {
-									if ($(this).css('backgroundImage').match(/^url[("']+(.*\.png)[)"']+$/i)) {
-										var src = RegExp.$1;
-										$(this).css({
-											backgroundImage: 'none',
-											filter: 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' +  src + '", sizingMethod="crop")'
-										});
-									}
+					// fix png's for IE 6
+					if ($.browser.msie && $.browser.version < 7) {
+						$('#contact .contact-button').each(function () {
+							if ($(this).css('backgroundImage').match(/^url[("']+(.*\.png)[)"']+$/i)) {
+								var src = RegExp.$1;
+								$(this).css({
+									backgroundImage: 'none',
+									filter: 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' +  src + '", sizingMethod="crop")'
 								});
 							}
 						});
-					});
+					}
 				});
 			});
 		});
 	},
 	show: function (dialog) {
-		$('#contact-container .contact-send').click(function (e) {
+		$('#contact .contact-send').click(function (e) {
 			e.preventDefault();
 			// validate form
 			if (contact.validate()) {
-				$('#contact-container .contact-message').fadeOut(function () {
-					$('#contact-container .contact-message').removeClass('contact-error').empty();
+				$('#contact .contact-message').fadeOut(function () {
+					$('#contact .contact-message').removeClass('contact-error').empty();
 				});
-				$('#contact-container .contact-title').html('Sending...');
-				$('#contact-container form').fadeOut(200);
-				$('#contact-container .contact-content').animate({
+				$('#contact .contact-title').html('Sending...');
+				$('#contact form').fadeOut(200);
+				$('#contact .contact-content').animate({
 					height: '80px'
 				}, function () {
-					$('#contact-container .contact-loading').fadeIn(200, function () {
+					$('#contact .contact-loading').fadeIn(200, function () {
 						$.ajax({
 							url: 'data/contact.php',
-							data: $('#contact-container form').serialize() + '&action=send',
+							data: $('#contact form').serialize() + '&action=send',
 							type: 'post',
 							cache: false,
 							dataType: 'html',
 							complete: function (xhr) {
-								$('#contact-container .contact-loading').fadeOut(200, function () {
-									$('#contact-container .contact-title').html('Thank you!');
-									$('#contact-container .contact-message').html(xhr.responseText).fadeIn(200);
+								$('#contact .contact-loading').fadeOut(200, function () {
+									$('#contact .contact-title').html('Thank you!');
+									$('#contact .contact-message').html(xhr.responseText).fadeIn(200);
 								});
 							},
 							error: contact.error
@@ -163,8 +156,8 @@ var contact = {
 				});
 			}
 			else {
-				if ($('#contact-container .contact-message:visible').length > 0) {
-					var msg = $('#contact-container .contact-message div');
+				if ($('#contact .contact-message:visible').length > 0) {
+					var msg = $('#contact .contact-message div');
 					msg.fadeOut(200, function () {
 						msg.empty();
 						contact.showError();
@@ -172,7 +165,7 @@ var contact = {
 					});
 				}
 				else {
-					$('#contact-container .contact-message').animate({
+					$('#contact .contact-message').animate({
 						height: '30px'
 					}, contact.showError);
 				}
@@ -181,18 +174,14 @@ var contact = {
 		});
 	},
 	close: function (dialog) {
-		$('#contact-container .contact-message').fadeOut();
-		$('#contact-container .contact-title').html('Goodbye...');
-		$('#contact-container form').fadeOut(200);
-		$('#contact-container .contact-content').animate({
+		$('#contact .contact-message').fadeOut();
+		$('#contact .contact-title').html('Goodbye...');
+		$('#contact form').fadeOut(200);
+		$('#contact .contact-content').animate({
 			height: 40
 		}, function () {
 			dialog.data.fadeOut(200, function () {
-				dialog.container.fadeOut(200, function () {
-					dialog.overlay.fadeOut(200, function () {
-						$.modal.close();
-					});
-				});
+				$.modal.close();
 			});
 		});
 	},
@@ -201,11 +190,11 @@ var contact = {
 	},
 	validate: function () {
 		contact.message = '';
-		if (!$('#contact-container #contact-name').val()) {
+		if (!$('#contact #contact-name').val()) {
 			contact.message += 'Name is required. ';
 		}
 
-		var email = $('#contact-container #contact-email').val();
+		var email = $('#contact #contact-email').val();
 		if (!email) {
 			contact.message += 'Email is required. ';
 		}
@@ -215,7 +204,7 @@ var contact = {
 			}
 		}
 
-		if (!$('#contact-container #contact-message').val()) {
+		if (!$('#contact #contact-message').val()) {
 			contact.message += 'Message is required.';
 		}
 
@@ -266,7 +255,7 @@ var contact = {
 		return true;
 	},
 	showError: function () {
-		$('#contact-container .contact-message')
+		$('#contact .contact-message')
 			.html($('<div class="contact-error">').append(contact.message))
 			.fadeIn(200);
 	}
