@@ -138,6 +138,11 @@
 		 */
 		opts: null,
 		/*
+		 * Some jQuery objects
+		 */
+		overlay_deco: null,
+		overlay: null,
+		/*
 		 * Contains the modal dialog elements and is the object passed 
 		 * back to the callback (onOpen, onShow, onClose) functions
 		 */
@@ -207,8 +212,8 @@
         .appendTo($tr);
       data.appendTo($dialog);
 
-      this.dialog.overlay_deco = $overlay_deco;
-      this.dialog.overlay = $overlay;
+      this.overlay_deco = $overlay_deco;
+      this.overlay = $overlay;
       this.dialog.data = data;
 
       if ($.isFunction(this.opts.onOpen))
@@ -235,7 +240,7 @@
 			
 			// bind the overlay click to the close function, if enabled
 			if (self.opts.close && self.opts.overlayClose) {
-				self.dialog.overlay.bind('click.simplemodal', function (e) {
+				self.overlay.bind('click.simplemodal', function (e) {
 					e.preventDefault();
 					self.close();
 				});
@@ -257,7 +262,7 @@
 		unbindEvents: function () {
 			$('.' + this.opts.closeClass).unbind('click.simplemodal');
 			$(document).unbind('keydown.simplemodal');
-			this.dialog.overlay.unbind('click.simplemodal');
+			this.overlay.unbind('click.simplemodal');
 		},
 		/*
 		 * Close the modal dialog
@@ -305,8 +310,8 @@
 				}
 
 				// remove the remaining elements
-				this.dialog.overlay_deco.hide().remove();
-				this.dialog.overlay.hide().remove();
+				this.overlay_deco.hide().remove();
+				this.overlay.hide().remove();
 
 				// reset the dialog object
 				this.dialog = {};
