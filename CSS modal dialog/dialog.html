@@ -28,55 +28,63 @@
 		margin:0 0 0 30%;
 		padding:0;
 	}
-	#modal {
-		display:none;
-	}
-	.modal #modal {
-		display:block;
-	}
 
 
 	/* irrelevant */
 	html {
 		font:13px/1.4 trebuchet ms, verdana, tahoma;
 	}
-	.dialog .content {
-		padding:0 1em;
-	}
-	.dialog {
+	#dialog {
 		background:white;
 		border:2px solid #080;
 	}
-	.content {
+	#content {
+		padding:0 1em;
 		border:2px solid #ecc;
 	}
 	:focus {
 		border:4px solid #900;
 	}
 	</style>
+
+	<script type="text/javascript" src="../jquery.js"></script>
+	<script type="text/javascript" src="../jquery.pmodal.js"></script>
+	<script>
+$(function () {
+	var modalShowing = false;
+
+	// toggle the modal.
+	// when it hides, focus the prior focused element.
+	$(document).keypress(function(e){
+
+		// m or M
+		if ( e.which == 109 || e.which == 77 ) {
+			e.preventDefault();
+			modalShowing = !modalShowing;
+			if (modalShowing) {
+				$("#dialog").modal();
+			}
+			else {
+				$.modal.close();
+			}
+		}
+	});
+});
+</script>
+
 </head><body>
-<div id="modal">
-	<div class="pmodal-overlay-decorator"></div>
-	<div class="pmodal-overlay">
-		<table class="pmodal-container" cellspacing="0">
-			<tr>
-				<td class="pmodal-dialog">
-					<div class="dialog" id="dialog">
-						<div class="content">
-							<h2>Modal Dialog</h2>
-							<p>Works in IE, Safari, Firefox, and Opera properly.</p>
-							<p>When the viewport is too small, a scrollbar appears to let you see the entire modal.</p>
-							<p>Text doesn't shift left and right when the modal shows or hides.</p>
-							<p>You should not be able to tab off of the modal, or scroll the body content.</p>
-							<p>Type "M" to toggle the modal.  Focus should return to wherever it was before the modal showed.</p>
-							<p>Thanks to <a href="http://www.hedgerwow.com/">Hedger</a> and <a href="http://www.hedgerwow.com/temp/css-vertical-align-center-overlay.html">his vertical-centering in IE approach</a>.</p>
-							<p><a href="http://foohack.com/2007/11/css-modal-dialog-that-works-right/?preview=true">Blog post on foohack about this thing</a></p>
-							<p>This is the end of the modal dialog</p>
-						</div>
-					</div>
-				</td>
-			</tr>
-		</table>
+
+<div id="dialog" style="display:none;">
+	<div id="content">
+		<h2>Modal Dialog</h2>
+		<p>Works in IE, Safari, Firefox, and Opera properly.</p>
+		<p>When the viewport is too small, a scrollbar appears to let you see the entire modal.</p>
+		<p>Text doesn't shift left and right when the modal shows or hides.</p>
+		<p>You should not be able to tab off of the modal, or scroll the body content.</p>
+		<p>Type "M" to toggle the modal.  Focus should return to wherever it was before the modal showed.</p>
+		<p>Thanks to <a href="http://www.hedgerwow.com/">Hedger</a> and <a href="http://www.hedgerwow.com/temp/css-vertical-align-center-overlay.html">his vertical-centering in IE approach</a>.</p>
+		<p><a href="http://foohack.com/2007/11/css-modal-dialog-that-works-right/?preview=true">Blog post on foohack about this thing</a></p>
+		<p>This is the end of the modal dialog</p>
 	</div>
 </div>
 
@@ -350,49 +358,4 @@ Praesent at urna. Curabitur felis arcu, sagittis non, congue in,
 molestie non, orci. Vestibulum ante ipsum primis in faucibus orci
 luctus et ultrices posuere cubilia Curae; </p></div>
 </div>
-<script>
-
-(function () {
-
-var dialog = document.getElementById('dialog');
-var html = document.documentElement;
-
-var modalShowing = (html.className === 'modal');
-
-window.onunload = function () {
-	dialog = body = html = null;
-};
-
-// toggle the modal.
-// when it hides, focus the prior focused element.
-html.onkeypress = function(e){
-	e=e||window.event;
-
-	var code = e.which || e.keyCode;
-
-	// m or M
-	if ( code !== 109 && code !== 77 ) {
-		return true;
-	}
-
-	e.preventDefault && e.preventDefault();
-	e.returnValue = false;
-
-	toggleModal();
-
-	return false;
-};
-
-var toggleModal = function () {
-
-	html.className=modalShowing?'':'modal';
-	modalShowing = !modalShowing;
-	if (modalShowing) {
-		dialog.focus();
-	}
-
-};
-
-})();
-</script>
 </body></html>
