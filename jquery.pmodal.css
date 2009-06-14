@@ -88,11 +88,9 @@ td.pmodal-dialog {
   background: url(x.png) no-repeat;
   cursor: pointer;
 
-  /*
-  background:none;
-  right:-14px;
-  width:22px;
-  height:26px;
-  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/basic/x.png',sizingMethod='scale');
-  */
+  *background: none;
+  *right: -14px;
+  *width: 22px;
+  *height: 26px;
+  *filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='x.png', sizingMethod='scale');
 }
