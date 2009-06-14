@@ -100,15 +100,14 @@
 	 * dataCss:			(Object:{}) The CSS styling for the data div
 	 * close:			(Boolean:true) If true, closeHTML, escClose and overClose will be used if set.
 	 							If false, none of them will be used.
-	 * closeHTML:		(String:'<a class="modalCloseImg" title="Close"></a>') The HTML for the 
-							default close link. SimpleModal will automatically add the closeClass to this element.
-	 * closeClass:		(String:'simplemodal-close') The CSS class used to bind to the close event
+	 * closeClass:		(String:'pmodal-close') The CSS class used to bind to the close event
 	 * escClose:		(Boolean:true) Allow Esc keypress to close the dialog? 
 	 * overlayClose:	(Boolean:false) Allow click on overlay to close the dialog?
 	 * persist:			(Boolean:false) Persist the data across modal calls? Only used for existing
 								DOM elements. If true, the data will be maintained across modal calls, if false,
 								the data will be reverted to its original state.
 	 * onShow:			(Function:null) The callback function used after the modal dialog has opened
+	 * onOpen:			(Function:null) The callback function used in place of SimpleModal's open
 	 * onClose:			(Function:null) The callback function used in place of SimpleModal's close
 	 */
 	$.modal.defaults = {
@@ -121,12 +120,12 @@
 		dataId: 'simplemodal-data',
 		dataCss: {},
 		close: true,
-		closeHTML: '<a class="modalCloseImg" title="Close"></a>',
-		closeClass: 'simplemodal-close',
+		closeClass: 'pmodal-close',
 		escClose: true,
 		overlayClose: false,
 		persist: false,
 		onShow: null,
+		onOpen: null,
 		onClose: null
 	};
 
@@ -138,6 +137,11 @@
 		 * Modal dialog options
 		 */
 		opts: null,
+		/*
+		 * Some jQuery objects
+		 */
+		overlay_deco: null,
+		overlay: null,
 		/*
 		 * Contains the modal dialog elements and is the object passed 
 		 * back to the callback (onOpen, onShow, onClose) functions
@@ -173,10 +177,6 @@
 					}
 				}
 			}
-			else if (typeof data == 'string' || typeof data == 'number') {
-				// just insert the data as innerHTML
-				data = $('<div/>').html(data);
-			}
 			else {
 				// unsupported data type!
 				alert('SimpleModal Error: Unsupported data type: ' + typeof data);
@@ -208,14 +208,17 @@
         .appendTo($tr);
       data.appendTo($dialog);
 
-      if ($.isFunction(this.opts.onShow)) {
-				this.opts.onShow.apply(this, [this.dialog]);
-			}
-      data.show();
-
-      this.dialog.overlay_deco = $overlay_deco;
-      this.dialog.overlay = $overlay;
+      this.overlay_deco = $overlay_deco;
+      this.overlay = $overlay;
       this.dialog.data = data;
+
+      if ($.isFunction(this.opts.onOpen))
+        this.opts.onOpen.apply(this, [this.dialog]);
+      else
+        data.show();
+
+      if ($.isFunction(this.opts.onShow))
+        this.opts.onShow.apply(this, [this.dialog]);
 
       this.bindEvents();
 		},
@@ -233,7 +236,7 @@
 			
 			// bind the overlay click to the close function, if enabled
 			if (self.opts.close && self.opts.overlayClose) {
-				self.dialog.overlay.bind('click.simplemodal', function (e) {
+				self.overlay.bind('click.simplemodal', function (e) {
 					e.preventDefault();
 					self.close();
 				});
@@ -255,7 +258,7 @@
 		unbindEvents: function () {
 			$('.' + this.opts.closeClass).unbind('click.simplemodal');
 			$(document).unbind('keydown.simplemodal');
-			this.dialog.overlay.unbind('click.simplemodal');
+			this.overlay.unbind('click.simplemodal');
 		},
 		/*
 		 * Close the modal dialog
@@ -303,8 +306,8 @@
 				}
 
 				// remove the remaining elements
-				this.dialog.overlay_deco.hide().remove();
-				this.dialog.overlay.hide().remove();
+				this.overlay_deco.hide().remove();
+				this.overlay.hide().remove();
 
 				// reset the dialog object
 				this.dialog = {};
