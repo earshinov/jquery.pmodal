@@ -177,10 +177,6 @@
 					}
 				}
 			}
-			else if (typeof data == 'string' || typeof data == 'number') {
-				// just insert the data as innerHTML
-				data = $('<div/>').html(data);
-			}
 			else {
 				// unsupported data type!
 				alert('SimpleModal Error: Unsupported data type: ' + typeof data);
