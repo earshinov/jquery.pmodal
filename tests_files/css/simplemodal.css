@@ -7,21 +7,7 @@
  * Revision: $Id: simplemodal.css 187 2009-02-10 00:01:01Z emartin24 $
  *
  */
-html, body {
-  height:100%;
-  width:100%;
-  margin:0;
-  padding:0;
-  overflow:hidden;
-}
 body {font-family:Verdana; background-color:#eee;}
-#body {
-  overflow:auto;
-  height:100%;
-  width:100%;
-  padding:0;
-  margin:0;
-}
 #container {width:800px; margin:0 auto; margin-top:20px; background-color:#fff; border:1px solid #aaa; }
 #header {padding:4px;}
 #header {background:#eee url(../img/header.gif); border-bottom:1px solid #aaa; text-align:center; color:#444;}
