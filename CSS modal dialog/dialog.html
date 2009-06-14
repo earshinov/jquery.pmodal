@@ -5,7 +5,10 @@
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>overlay vertical centering</title>
+
 	<style type="text/css">
+	@import url(../jquery.pmodal.css);
+
 	html, body {
 		height:100%;
 		width:100%;
@@ -13,51 +16,7 @@
 		padding:0;
 		overflow:hidden;
 	}
-	.overlay-decorator {
-	  background:#024;
-		height:100%;
-	  width:100%;
-	  position:absolute;
-		top:0;
-		left:0;
-	  opacity:0.8;
-		z-index:2000;
-		*display:none;
-	}
-	.overlay-wrap {
-		height:100%;
-		width:100%;
-		display:block;
-		position:absolute;
-		top:0;
-		left:0;
-		z-index:2001;
-		
-		overflow:auto;
-		*zoom:1;
-		/* (0.8 * 255).toString(16) = cc */
-		*filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#cc002244,endColorstr=#cc002244);
-		*background:transparent url(pixel.gif);
-	}
-	.overlay {
-		z-index:2001;
-		position:relative;
-		margin:0 auto;
-		height:100%;
-		vertical-align:middle;
-		width:300px;
-		z-index:9999;
-		
-		*text-align:center;
-		*position:static;
-	}
-	.dialog-wrap {
-		vertical-align:middle;
 
-		*text-align:left;
-		*zoom:1;
-	}
-	
 	#body {
 		overflow:auto;
 		height:100%;
@@ -75,8 +34,8 @@
 	.modal #modal {
 		display:block;
 	}
-	
-	
+
+
 	/* irrelevant */
 	html {
 		font:13px/1.4 trebuchet ms, verdana, tahoma;
@@ -97,11 +56,11 @@
 	</style>
 </head><body>
 <div id="modal">
-	<div class="overlay-decorator"></div>
-	<div class="overlay-wrap">
-		<table class="overlay" cellspacing="0">
+	<div class="pmodal-overlay-decorator"></div>
+	<div class="pmodal-overlay">
+		<table class="pmodal-container" cellspacing="0">
 			<tr>
-				<td class="dialog-wrap">
+				<td class="pmodal-dialog">
 					<div tabindex="-1" class="dialog" id="dialog">
 						<div class="content">
 							<h2>Modal Dialog</h2>
@@ -124,13 +83,13 @@
 <div tabindex="-1" id="body">
 	<div id="doc">
 		<h2>This is the body content</h2>
-		
+
 		<p>Type
 the letter "M" on your keyboard to toggle the modal. Doing so should
 move the focus to the dialog box. I'm hoping that the reading should
 pick up at "Modal Dialog, works in IE, etc." when this occurs, due to
 the focus shift.</p>
-		
+
 		<p>The following is just dummy text to make the page long enough to force a scrollbar.</p>
 		<p><a href="#">These links are here</a> <a href="#">to put focusable things</a> <a href="#">in the body content.</a></p>
 		<p>
@@ -451,13 +410,13 @@ var onfocus = function (e) {
 		body.style.backgroundColor = '#fff';
 		body.style.color = '#000';
 	}
-*/	
+*/
 	// save the last focused element when the modal is hidden.
 	if ( !modalShowing ) {
 		focusedElement = el;
 		return;
 	}
-	
+
 	// if we're focusing the dialog, then just clear the blurring flag.
 	// else, focus the dialog and prevent the other event.
 	var p = el.parentNode;
@@ -493,24 +452,24 @@ if ( isSafari ) {
 // when it hides, focus the prior focused element.
 html.onkeypress = function(e){
 	e=e||window.event;
-	
+
 	var code = e.which || e.keyCode;
-	
+
 	// m or M
 	if ( code !== 109 && code !== 77 ) {
 		return true;
 	}
-	
+
 	e.preventDefault && e.preventDefault();
 	e.returnValue = false;
-	
+
 	toggleModal();
-	
+
 	return false;
 };
 
 var toggleModal = function () {
-	
+
 	html.className=modalShowing?'':'modal';
 	modalShowing = !modalShowing;
 	if (modalShowing) {
@@ -520,7 +479,7 @@ var toggleModal = function () {
 			focusedElement.focus();
 		} catch(ex) {}
 	}
-	
+
 };
 
 })();
