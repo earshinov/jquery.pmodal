@@ -19,7 +19,7 @@ $(document).ready(function () {
 	});
 	$('a#test3').click(function (e) {
 		e.preventDefault();
-		$('<div class="dialog"><a href="#" class="pmodal-close"/><h1>New DOM Element</h1></div>').modal();
+		$('<div class="dialog"><a href="#" class="pmodal-close pmodal-close-image"/><h1>New DOM Element</h1></div>').modal();
 	});
 	$('a#test4').click(function (e) {
 		e.preventDefault();
@@ -28,7 +28,7 @@ $(document).ready(function () {
 	$('a#test5').click(function (e) {
 		e.preventDefault();
 		$.modal($("<div class='test dialog'>\
-					<a href='#' class='pmodal-close'/>\
+					<a href='#' class='pmodal-close pmodal-close-image'/>\
 					<h1>Sample Content</h1>\
 					<p>This can be complex HTML containing <a href='#'>links</a>,\
 					<input type='text' value='input boxes' size='8'/>, etc...</p>\
@@ -37,10 +37,9 @@ $(document).ready(function () {
 	$('a#test7').click(function (e) {
 		e.preventDefault();
 		$.modal($("<div class='test dialog'>\
-					<a href='#' class='pmodal-close'/>\
 					<h1>Sample Content</h1>\
 					<p>This example uses a custom close.</p>\
-					<p><a href='#' class='simplemodal-close'>Close</a></p>\
+					<p><a href='#' class='pmodal-close'>Close</a></p>\
 				</div>"), {close:false});
 	});
 	$('a#test8').click(function (e) {
@@ -73,7 +72,9 @@ $(document).ready(function () {
  * and data.
  */
 function modalOpen (dialog) {
-	dialog.data.slideDown('slow');
+	dialog.overlays.fadeIn('slow', function () {
+		dialog.data.slideDown('slow');
+	});
 }
 
 /**
@@ -88,7 +89,9 @@ function modalOpen (dialog) {
  */
 function modalClose (dialog) {
 	dialog.data.fadeOut('slow', function () {
-		$.modal.close();
+		dialog.overlays.slideUp('slow', function () {
+			$.modal.close();
+		});
 	});
 }
 

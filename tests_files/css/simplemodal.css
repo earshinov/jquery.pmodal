@@ -36,4 +36,3 @@ a:hover {text-decoration:none; color:#336699;}
 
 /* SimpleModal Styles */
 div.dialog {height:400px; width:600px; background-color:#fff; border:3px solid #ccc; position: relative;}
-a.pmodal-close {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-18px; cursor:pointer;}
