@@ -211,8 +211,8 @@
   /*
    * SimpleModal default options
    *
-   * opacity:          (Number:0.5) The opacity value for the overlay div, from 0 - 100
-   * background_color: (String:'#333') Overlay background color
+   * opacity:          (Number:0.5) The opacity value for the overlay div, from 0.0 to 1.0
+   * background_color: (String:'333333') Overlay background color in 6-digit hex form without '#'
    *
    * close:            (Boolean:true) If true, closeClass, escClose and overClose will be used if set.
    * closeClass:       (String:'pmodal-close') The CSS class used to bind to the close event
@@ -229,7 +229,7 @@
    */
   $.modal.defaults = {
     opacity: 0.5,
-    background_color: '#333',
+    background_color: '333333',
 
     close: true,
     closeClass: 'pmodal-close',
@@ -305,7 +305,7 @@
           $(document.createElement('div'))
             .addClass('pmodal-overlay-decorator')
             .css({
-              'background-color': this.opts.background_color,
+              'background-color': '#' + this.opts.background_color,
               'display': 'none',
               'opacity': this.opts.opacity
             })
@@ -317,9 +317,10 @@
         .css('display', 'none')
         .appendTo(body);
       if (ie) {
-        var clr = (this.opts.opacity * 255).toString(16);
-        var filter = 'progid:DXImageTransform.Microsoft.gradient(startColorstr=' + clr + ',endColorstr=' + clr + ');'
-        $overlay.css('filter', filter);
+        var clr = parseInt(this.opts.opacity * 255)
+		    clr = ''.concat((clr < 16) ? '0' : '', clr.toString(16), this.opts.background_color);
+        var filter = 'progid:DXImageTransform.Microsoft.gradient(startColorstr=#' + clr + ',endColorstr=#' + clr + ');'
+		    $overlay.css('filter', filter);
       }
       $overlays = $overlays.add($overlay);
 
