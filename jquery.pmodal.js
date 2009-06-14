@@ -22,13 +22,26 @@
  * the dialog is larger than window area. Most modal dialog implementations
  * do not give attension to this issue.
  *
- * --- Typical usage ---
+ * --- Typical usage ----------------------------------------------------------
  *
- * TODO: div helpers
- * TODO: position: relative
- * TODO: close image
+ * --- Prepare - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  *
- * 1) As a chained function on a jQuery object, like $('#myDiv').modal();.
+ * First of all, you must apply certain styles to 'html' and 'body' elements
+ * so that this modal dialog works. Your page should look like this:
+ *
+ * <html class='pmodal-html'>
+ *  <body class='pmodal-body'>
+ *    <div class='pmodal-content'>
+ *      Your content goes here.
+ *    </div>
+ *  </body>
+ * </html>
+ *
+ * --- Create - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ *
+ * There are two ways to create dialog:
+ *
+ * 1. As a chained function on a jQuery object, like $('#myDiv').modal();.
  * This call would place the DOM object, #myDiv, inside a modal dialog.
  * An optional options object can be passed as a parameter.
  *
@@ -36,7 +49,7 @@
  *   @example $('#myDiv').modal({options});
  *   @example jQueryObject.modal({options});
  *
- * 2) As a stand-alone function, like $.modal(data). The data parameter
+ * 2. As a stand-alone function, like $.modal(data). The data parameter
  * is required and an optional options object can be passed as a second
  * parameter. This method provides more flexibility in the types of data
  * that are allowed. The data could be a DOM object or a jQuery object.
@@ -50,16 +63,99 @@
  * dialog can be created at a time. Which means that all of the matched
  * elements will be displayed within the modal container.
  *
- * --- Styling ---
+ * --- Customize - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  *
- * jquery.pmodal provides minimal styling. If you'd like to customize
- * dialog's look and feel, style the object you pass to $.modal().
+ * Please see comments before $.modal.defaults to see the list
+ * of available options.
  *
- * --- Callbacks ---
+ * --- Close - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  *
- * TODO:
+ * To close a running dialog, call $.modal.close();
  *
- * --- Browser Compability ---
+ * --- Styling ----------------------------------------------------------------
+ *
+ * The plugin provides minimal styling. If you'd like to customize
+ * dialog's look and feel, style the elements you pass to $.modal().
+ *
+ * Please note that wrappers placed by the plugin around the elements
+ * do not have 'position: relative' as distinct from SimpleModal.
+ *
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ *
+ * To make an element within your dialog to close it, add there
+ * 'pmodal-close' class (you can override class name passing 'closeClass'
+ * option to $.modal()). Example:
+ *
+ * <div id='my-dialog'>
+ *  <a href='#' class='pmodal-close'>Close</a>
+ * </div>
+ *
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ *
+ * A typical task is to add a close icon to the top right corner of the
+ * dialog. We use an approach somewhat different from SimpleModal's one.
+ * To add the icon
+ *
+ * - ensure that your dialog has 'position: relative';
+ * - and place an element with 'pmodal-close-image' style within your dialog.
+ *
+ * Please note that the icon won't close the dialog unless you pass
+ * 'pmodal-close' class additionally. Example:
+ *
+ * <div id='my-dialog' style='position: relative;'>
+ *   <a href='#' class='pmodal-close pmodal-close-image'></a>
+ *   Dialog content goes here.
+ * </div>
+ *
+ * --- Callbacks --------------------------------------------------------------
+ *
+ * You can supply some callbacks to customize dialog behaviour and apply
+ * special effects. They are 'onOpen', 'onShow' and 'onClose' options
+ * which you may pass to $.modal().
+ *
+ * Each callback takes ome argument - an object describing the dialog. It
+ * contains two attributes:
+ *
+ *   overlays:
+ *     Overlay elements added by the plugin. For example, you may wish
+ *     to use it in your 'onShow' and 'onClose' callbacks to provide animation.
+ *
+ *   data:
+ *     The element you passed to $.modal() or its copy.
+ *
+ * --- onOpen - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ *
+ * Called before the plugin shows the dialog. If you supply this callback,
+ * you should show 'overlays' and 'data' in it.
+ *
+ * You may use this callback for animation. E.g.,
+ *
+ * function modalOpen(dialog){
+ *   dialog.overlays.fadeIn('slow', function(){
+ *     dialog.data.slideDown('slow');
+ *   });
+ * }
+ *
+ * --- onShow - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ *
+ * Called after the dialog is shown.
+ *
+ * --- onClose - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ *
+ * Called before the plugin destroys the dialog. If you supply this callback,
+ * you should call $.modal.close() from it.
+ *
+ * You may use this callback for animation. E.g.,
+ *
+ * function modalClose(dialog){
+ *   dialog.data.fadeOut('slow', function(){
+ *     dialog.overlays.slideUp('slow', function(){
+ *       $.modal.close();
+ *     });
+ *   });
+ * }
+ *
+ * --- Browser Compability ----------------------------------------------------
  *
  * Tested in the following browsers:
  * - IE 6
@@ -67,9 +163,23 @@
  * - Opera 9
  * - Chrome 1
  *
- * --- Tests ---
+ * --- Tests ------------------------------------------------------------------
  *
  * TODO:
+ *
+ * --- TODO -------------------------------------------------------------------
+ *
+ * - provide options to assign custom classes to overlays (may be used
+ *   for further customization; like in SimpleModal);
+ *
+ * - provide a test demonstration dialog behavious with 'overClose'
+ *   options set to 'true';
+ *
+ * - prevent focus border to appear around the close icon (e.g., in Firefox 3);
+ *
+ * - [hard] focus changing with Tab only within a dialog when it's shown
+ *   (insufficient implementation in SimpleModal and buggy implementation
+ *    in 'CSS Modal Dialog that Works Right').
  */
 ;(function ($) {
   /*
@@ -112,7 +222,6 @@
    * persist:          (Boolean:false) Persist the data across modal calls? Only used for existing
    *                   DOM elements. If true, the data will be maintained across
    *                   modal calls, if false, the data will be reverted to its original state.
-   *
    *
    * onOpen:           (Function:null) The callback function used in place of built-in open
    * onShow:           (Function:null) The callback function used after the modal dialog has opened
