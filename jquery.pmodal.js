@@ -80,7 +80,25 @@
  * Please note that wrappers placed by the plugin around the elements
  * do not have 'position: relative' as distinct from SimpleModal.
  *
- * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * --- Fixed width and height - - - - - - - - - - - - - - - - - - - - - - - - -
+ *
+ * Fixed 'width' or 'height' CSS properties along with 'position: relative'
+ * on the element you pass to $.modal() lead to problems with vertical
+ * positioning of the dialog in IE (it simply does not work). So, *do not ever
+ * set width and height values there*, pass 'width' and 'height' options
+ * to $.modal() instead. The plugin will
+ *
+ * 1. apply this styles to some wrapper elements it provides to ensure proper
+ *    dimensions and functioning in IE;
+ *
+ * 2. set necessary CSS dimension properties on the element you passed
+ *    (to be precise, 'height' will be changes to '100%').
+ *
+ * I'd prefer to make the plugin extract 'width' and 'height' properties
+ * from the passed element, but it's not always possible when they are
+ * set via CSS class. So, use options.
+ *
+ * --- Close buttons and links  - - - - - - - - - - - - - - - - - - - - - - - -
  *
  * To make an element within your dialog to close it, add there
  * 'pmodal-close' class (you can override class name passing 'closeClass'
@@ -90,7 +108,7 @@
  *  <a href='#' class='pmodal-close'>Close</a>
  * </div>
  *
- * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * --- Close icon - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  *
  * A typical task is to add a close icon to the top right corner of the
  * dialog. We use an approach somewhat different from SimpleModal's one.
@@ -211,8 +229,11 @@
   /*
    * SimpleModal default options
    *
-   * opacity:          (Number:0.5) The opacity value for the overlay div, from 0 - 100
-   * background_color: (String:'#333') Overlay background color
+   * opacity:          (Number:0.5) The opacity value for the overlay div, from 0.0 to 1.0
+   * background_color: (String:'333333') Overlay background color in 6-digit hex form without '#'
+   *
+   * width:            (String:'300px') Width of the dialog
+   * height            (String:'auto') Height of the dialog
    *
    * close:            (Boolean:true) If true, closeClass, escClose and overClose will be used if set.
    * closeClass:       (String:'pmodal-close') The CSS class used to bind to the close event
@@ -229,7 +250,10 @@
    */
   $.modal.defaults = {
     opacity: 0.5,
-    background_color: '#333',
+    background_color: '333333',
+
+    width: '300px',
+    height: 'auto',
 
     close: true,
     closeClass: 'pmodal-close',
@@ -268,24 +292,28 @@
       this.occb = false;
 
       // determine how to handle the data based on its type
-      if (typeof data == 'object') {
-        // convert DOM object to a jQuery object
-        data = data instanceof jQuery ? data : $(data);
-
-        // if the object came from the DOM, keep track of its parent
-        if (data.parent().parent().size() > 0) {
-          this.dialog.parentNode = data.parent();
-
-          // persist changes? if not, make a clone of the element
-          if (!this.opts.persist) {
-            this.dialog.orig = data.clone(true);
-          }
-        }
-      }
-      else {
+      if (typeof data != 'object') {
         // unsupported data type!
         alert('SimpleModal Error: Unsupported data type: ' + typeof data);
         return false;
+      }
+
+      // convert DOM object to a jQuery object
+      data = data instanceof jQuery ? data : $(data);
+      if (data.length != 1) {
+        // multiple elements passed!
+        alert('SimpleModal Error: Multiple elements passed!');
+        return false;
+      }
+
+      // if the object came from the DOM, keep track of its parent
+      if (data.parent().parent().size() > 0) {
+        this.dialog.parentNode = data.parent();
+
+        // persist changes? if not, make a clone of the element
+        if (!this.opts.persist) {
+          this.dialog.orig = data.clone(true);
+        }
       }
 
       /* create the modal overlay and container */
@@ -298,50 +326,61 @@
     create: function (data) {
       var body = $('body');
       var ie = $.browser.msie && parseInt($.browser.version, 10) < 8;
-      var $overlays = $([]);
 
-      if (!ie)
-        $overlays = $overlays.add(
-          $(document.createElement('div'))
-            .addClass('pmodal-overlay-decorator')
-            .css({
-              'background-color': this.opts.background_color,
-              'display': 'none',
-              'opacity': this.opts.opacity
-            })
-            .appendTo(body)
-        );
+      $overlay_deco = $(document.createElement('div'))
+        .addClass('pmodal-overlay-decorator')
+        .css({
+          'background-color': '#' + this.opts.background_color,
+          'display': 'none',
+          'opacity': this.opts.opacity
+        })
+        .appendTo(body);
+
+      // add an iframe to prevent <select> elements from bleeding through
+      if (ie)
+        $(document.createElement('iframe'))
+          .addClass('pmodal-iframe')
+          .appendTo($overlay_deco);
 
       var $overlay = $(document.createElement('div'))
         .addClass('pmodal-overlay')
         .css('display', 'none')
         .appendTo(body);
       if (ie) {
-        var clr = (this.opts.opacity * 255).toString(16);
-        var filter = 'progid:DXImageTransform.Microsoft.gradient(startColorstr=' + clr + ',endColorstr=' + clr + ');'
-        $overlay.css('filter', filter);
+        var clr = parseInt(this.opts.opacity * 255)
+		    clr = ''.concat((clr < 16) ? '0' : '', clr.toString(16), this.opts.background_color);
+        var filter = 'progid:DXImageTransform.Microsoft.gradient(startColorstr=#' + clr + ',endColorstr=#' + clr + ');'
+		    $overlay.css('filter', filter);
       }
-      $overlays = $overlays.add($overlay);
 
       var $container = $(document.createElement('table'))
         .attr('cellspacing', '0')
         .addClass('pmodal-container')
+        .css('width', this.opts.width)
         .appendTo($overlay);
       var $tr = $(document.createElement('tr'))
         .appendTo($container);
       var $dialog = $(document.createElement('td'))
         .addClass('pmodal-dialog')
+        .css('height', this.opts.height)
         .appendTo($tr);
-      data.appendTo($dialog);
+      data
+          /*
+           * see the large comment in the top,
+           * section 'fixed width and height'
+           * to know why height is set here
+           */
+        .css('height', '100%')
+        .appendTo($dialog);
 
-      this.dialog.overlays = $overlays;
+      this.dialog.overlays = $overlay_deco.add($overlay);
       this.dialog.data = data;
 
       if ($.isFunction(this.opts.onOpen))
         this.opts.onOpen.apply(this, [this.dialog]);
       else {
-        $overlays.show();
-        data.show();
+        this.dialog.overlays.show();
+        this.dialog.data.show();
       }
 
       if ($.isFunction(this.opts.onShow))

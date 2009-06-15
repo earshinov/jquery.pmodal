@@ -16,6 +16,14 @@ div.pmodal-content {
 
 /* ------------------------------------------------------------------------- */
 
+/*
+ * CSS classes 'pmodal-overlay-decorator' and 'pmodal-iframe' are used
+ * in IE to prevent select options from bleeding through.
+ *
+ * http://anton-egorov.blogspot.com/2007/11/ie-select-z-index.html
+ * http://www.hedgerwow.com/360/bugs/css-select-free.html
+ */
+
 div.pmodal-overlay-decorator {
   height: 100%;
   width: 100%;
@@ -29,9 +37,19 @@ div.pmodal-overlay-decorator {
    * to 'style' attribute dynamically with JavaScript.
    */
 
-  /*
-   * 'div' element with this class is not used in IE.
-   */
+  *overflow: hidden;
+}
+
+iframe.pmodal-iframe {
+  display:none;/*sorry for IE5*/
+  display/**/:block;/*sorry for IE5*/
+  position:absolute;/*must have*/
+  top:0;/*must have*/
+  left:0;/*must have*/
+  z-index:-1;/*must have*/
+  filter:mask();/*must have*/
+  width:3000px;/*must have for any big value*/
+  height:3000px/*must have for any big value*/;
 }
 
 div.pmodal-overlay {
@@ -63,6 +81,11 @@ table.pmodal-container {
 
   *text-align: center;
   *position: static;
+
+  /*
+   * 'width' property is assigned to 'style'
+   * attribute dynamically with JavaScript.
+   */
 }
 
 td.pmodal-dialog {
@@ -70,6 +93,12 @@ td.pmodal-dialog {
 
   *text-align: left;
   *zoom: 1;
+
+  /*
+   * 'height' property is assigned to 'style'
+   * attribute dynamically with JavaScript,
+   * if caller required fixed width.
+   */
 }
 
 /* ------------------------------------------------------------------------- */
@@ -88,11 +117,9 @@ td.pmodal-dialog {
   background: url(x.png) no-repeat;
   cursor: pointer;
 
-  /*
-  background:none;
-  right:-14px;
-  width:22px;
-  height:26px;
-  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/basic/x.png',sizingMethod='scale');
-  */
+  *background: none;
+  *right: -14px;
+  *width: 22px;
+  *height: 26px;
+  *filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='x.png', sizingMethod='scale');
 }
