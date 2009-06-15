@@ -183,19 +183,45 @@
  *
  * --- Tests ------------------------------------------------------------------
  *
- * TODO:
+ * Tests are located in separate branches of the main repository
+ * ( http://github.com/earshinov/jquery.pmodal/ ).
  *
+ *   pmodal_modaldialog ( http://github.com/earshinov/jquery.pmodal/tree/pmodal_modaldialog )
+ *
+ *     Contains adapted test from "CSS Modal Dialog that Works Right" article
+ *     ( http://foohack.com/tests/vertical-align/dialog.html ).
+ *
+ *   pmodal_simplemodal ( http://github.com/earshinov/jquery.pmodal/tree/pmodal_simplemodal )
+ *
+ *     Contains adapted SimpleModal demos
+ *     ( http://www.ericmmartin.com/simplemodal/ ).
+ *
+ *   pmodal_simplemodaltests ( http://github.com/earshinov/jquery.pmodal/tree/pmodal_simplemodaltests )
+ *
+ *     Containes adapted SimpleModal tests
+ *     ( http://www.ericmmartin.com/simplemodal-test/ ).
+ *
+ * There are also some useful tests which aren't yet provided. Tests TODO:
+ * - non-fixed width dialog test
+ * - 'overClose' option test
+ * - doctypes test (as at SimpleModal tests page)
+ * 
  * --- TODO -------------------------------------------------------------------
  *
- * - provide options to assign custom classes to overlays (may be used
- *   for further customization; like in SimpleModal);
+ * - Provide options to assign custom classes to overlays (may be used
+ *   for further customization; like in SimpleModal).
  *
- * - provide a test demonstration dialog behavious with 'overClose'
- *   options set to 'true';
+ * - Prevent focus border to appear around the close icon (e.g., in Firefox 3);
  *
- * - prevent focus border to appear around the close icon (e.g., in Firefox 3);
+ * - Determine how 'width', 'height' and 'position' CSS properties set on
+ *   an element passed to $.modal() influence vertical positioning
+ *   of the dialog in IE.  Explanation given in "fixed width and height"
+ *   section above is not absolutely correct as the "contact" test
+ *   from "pmodal_simplemodal" test suite is working ok in IE, though
+ *   fixed width and 'position: relative' are set.  Maybe 'height: 100%'
+ *   is the key...
  *
- * - [hard] focus changing with Tab only within a dialog when it's shown
+ * - [hard] Focus changing with Tab only within a dialog when it's shown
  *   (insufficient implementation in SimpleModal and buggy implementation
  *    in "CSS Modal Dialog that Works Right").
  */
