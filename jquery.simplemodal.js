@@ -307,13 +307,19 @@
       }
 
       // if the object came from the DOM, keep track of its parent
+      this.parentNode = null;
       if (data.parent().parent().size() > 0) {
-        this.dialog.parentNode = data.parent();
+        this.parentNode = data.parent();
 
         // persist changes? if not, make a clone of the element
         if (!this.opts.persist) {
-          this.dialog.orig = data.clone(true);
+          data = data.clone(true);
         }
+      }
+      else if (this.opts.persist) {
+        // only DOM data can persist!
+        alert('SimpleModal Error: Only DOM data can persist!');
+        return false;
       }
 
       /* create the modal overlay and container */
@@ -447,26 +453,12 @@
         this.opts.onClose.apply(this, [this.dialog]);
       }
       else {
-        // if the data came from the DOM, put it back
-        if (this.dialog.parentNode) {
-          // save changes to the data?
-          if (this.opts.persist) {
-            // insert the (possibly) modified data back into the DOM
-            this.dialog.data.hide().appendTo(this.dialog.parentNode);
-          }
-          else {
-            // remove the current and insert the original,
-            // unmodified data back into the DOM
-            this.dialog.data.hide().remove();
-            this.dialog.orig.appendTo(this.dialog.parentNode);
-          }
-        }
-        else {
-          // otherwise, remove it
-          this.dialog.data.hide().remove();
+        // put DOM data back if necessary
+        if (this.parentNode && this.opts.persist) {
+          this.dialog.data.hide().appendTo(this.parentNode);
         }
 
-        // remove the remaining elements
+        // remove all elements
         this.dialog.overlays.remove();
 
         // reset the dialog object
