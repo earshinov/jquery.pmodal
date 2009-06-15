@@ -232,7 +232,7 @@
    * opacity:          (Number:0.5) The opacity value for the overlay div, from 0.0 to 1.0
    * background_color: (String:'333333') Overlay background color in 6-digit hex form without '#'
    *
-   * width:            (String:'300px') Width of the dialog
+   * width:            (String:'auto') Width of the dialog
    * height            (String:'auto') Height of the dialog
    *
    * close:            (Boolean:true) If true, closeClass, escClose and overClose will be used if set.
@@ -252,7 +252,7 @@
     opacity: 0.5,
     background_color: '333333',
 
-    width: '300px',
+    width: 'auto',
     height: 'auto',
 
     close: true,
