@@ -9,21 +9,23 @@
  *
  */
 $(document).ready(function () {
+	var attrs = {width: '600px', height: '400px'};
+
 	$('a#test1').click(function (e) {
 		e.preventDefault();
-		$('#modalContentTest').modal();
+		$('#modalContentTest').modal(attrs);
 	});
 	$('a#test2').click(function (e) {
 		e.preventDefault();
-		$.modal($('#modalContentTest'));
+		$.modal($('#modalContentTest'), attrs);
 	});
 	$('a#test3').click(function (e) {
 		e.preventDefault();
-		$('<div class="dialog"><a href="#" class="pmodal-close pmodal-close-image"/><h1>New DOM Element</h1></div>').modal();
+		$('<div class="dialog"><a href="#" class="pmodal-close pmodal-close-image"/><h1>New DOM Element</h1></div>').modal(attrs);
 	});
 	$('a#test4').click(function (e) {
 		e.preventDefault();
-		$.modal(document.getElementById('modalContentTest'));
+		$.modal(document.getElementById('modalContentTest'), attrs);
 	});
 	$('a#test5').click(function (e) {
 		e.preventDefault();
@@ -32,7 +34,7 @@ $(document).ready(function () {
 					<h1>Sample Content</h1>\
 					<p>This can be complex HTML containing <a href='#'>links</a>,\
 					<input type='text' value='input boxes' size='8'/>, etc...</p>\
-				</div>"));
+				</div>"), attrs);
 	});
 	$('a#test7').click(function (e) {
 		e.preventDefault();
@@ -40,27 +42,27 @@ $(document).ready(function () {
 					<h1>Sample Content</h1>\
 					<p>This example uses a custom close.</p>\
 					<p><a href='#' class='pmodal-close'>Close</a></p>\
-				</div>"), {close:false});
+				</div>"), $.extend({close:false}, attrs));
 	});
 	$('a#test8').click(function (e) {
 		e.preventDefault();
-		$('#modalContentPersistTest').modal({persist: true});
+		$('#modalContentPersistTest').modal($.extend({persist: true}, attrs));
 	});
 	$('a#test9').click(function (e) {
 		e.preventDefault();
-		$('#modalContentTest').modal({onOpen: modalOpen});
+		$('#modalContentTest').modal($.extend({onOpen: modalOpen}, attrs));
 	});
 	$('a#test10').click(function (e) {
 		e.preventDefault();
-		$('#modalContentTest').modal({onClose: modalClose});
+		$('#modalContentTest').modal($.extend({onClose: modalClose}, attrs));
 	});
 	$('a#test11').click(function (e) {
 		e.preventDefault();
-		$('#modalContentTest').modal({onShow: modalShow});
+		$('#modalContentTest').modal($.extend({onShow: modalShow}, attrs));
 	});
 	$('a#test12').click(function (e) {
 		e.preventDefault();
-		$.modal($('<div class="test dialog"><a href="#" class="pmodal-close pmodal-close-image"/><h1>IE SELECT bleed test</h1></div>'));
+		$.modal($('<div class="test dialog"><a href="#" class="pmodal-close pmodal-close-image"/><h1>IE SELECT bleed test</h1></div>'), attrs);
 	});
 });
 
