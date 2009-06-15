@@ -297,14 +297,8 @@
         alert('SimpleModal Error: Unsupported data type: ' + typeof data);
         return false;
       }
-
       // convert DOM object to a jQuery object
       data = data instanceof jQuery ? data : $(data);
-      if (data.length != 1) {
-        // multiple elements passed!
-        alert('SimpleModal Error: Multiple elements passed!');
-        return false;
-      }
 
       // if the object came from the DOM, keep track of its parent
       this.parentNode = null;
