@@ -78,7 +78,7 @@
  * dialog's look and feel, style the elements you pass to $.modal().
  *
  * Please note that wrappers placed by the plugin around the elements
- * do not have 'position: relative' as distinct from SimpleModal.
+ * do not have 'position: relative' *as distinct from SimpleModal*.
  *
  * --- Fixed width and height - - - - - - - - - - - - - - - - - - - - - - - - -
  *
@@ -111,7 +111,7 @@
  * --- Close icon - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  *
  * A typical task is to add a close icon to the top right corner of the
- * dialog. We use an approach somewhat different from SimpleModal's one.
+ * dialog. We use *an approach somewhat different from SimpleModal's one*.
  * To add the icon
  *
  * - ensure that your dialog has 'position: relative';
@@ -183,21 +183,53 @@
  *
  * --- Tests ------------------------------------------------------------------
  *
- * TODO:
+ * Tests are located in separate branches of the main repository
+ * ( http://github.com/earshinov/jquery.pmodal/ ).
  *
+ *   pmodal_modaldialog ( http://github.com/earshinov/jquery.pmodal/tree/pmodal_modaldialog )
+ *
+ *     Contains adapted test from "CSS Modal Dialog that Works Right" article
+ *     ( http://foohack.com/tests/vertical-align/dialog.html ).
+ *
+ *   pmodal_simplemodal ( http://github.com/earshinov/jquery.pmodal/tree/pmodal_simplemodal )
+ *
+ *     Contains adapted SimpleModal demos
+ *     ( http://www.ericmmartin.com/simplemodal/ ).
+ *
+ *   pmodal_simplemodaltests ( http://github.com/earshinov/jquery.pmodal/tree/pmodal_simplemodaltests )
+ *
+ *     Containes adapted SimpleModal tests
+ *     ( http://www.ericmmartin.com/simplemodal-test/ ).
+ *
+ * There are also some useful tests which aren't yet provided. Tests TODO:
+ * - non-fixed width dialog test
+ * - 'overClose' option test
+ * - doctypes test (as at SimpleModal tests page)
+ * 
  * --- TODO -------------------------------------------------------------------
  *
- * - provide options to assign custom classes to overlays (may be used
- *   for further customization; like in SimpleModal);
+ * - Provide options to assign custom classes to overlays (may be used
+ *   for further customization; like in SimpleModal).
  *
- * - provide a test demonstration dialog behavious with 'overClose'
- *   options set to 'true';
+ * - Prevent focus border to appear around the close icon (e.g., in Firefox 3);
  *
- * - prevent focus border to appear around the close icon (e.g., in Firefox 3);
+ * - Determine how 'width', 'height' and 'position' CSS properties set on
+ *   an element passed to $.modal() influence vertical positioning
+ *   of the dialog in IE.  Explanation given in "fixed width and height"
+ *   section above is not absolutely correct as the "contact" test
+ *   from "pmodal_simplemodal" test suite is working ok in IE, though
+ *   fixed width and 'position: relative' are set.  Maybe 'height: 100%'
+ *   is the key...
  *
- * - [hard] focus changing with Tab only within a dialog when it's shown
+ * - [hard] Focus changing with Tab only within a dialog when it's shown
  *   (insufficient implementation in SimpleModal and buggy implementation
- *    in 'CSS Modal Dialog that Works Right').
+ *    in "CSS Modal Dialog that Works Right").
+ *
+ * --- A note about repository organization -----------------------------------
+ *
+ * Due to historical reasons, "simplemodal_changes"
+ * is the main development branch.
+ * 
  */
 ;(function ($) {
   /*
@@ -227,12 +259,12 @@
   };
 
   /*
-   * SimpleModal default options
+   * Default options
    *
    * opacity:          (Number:0.5) The opacity value for the overlay div, from 0.0 to 1.0
    * background_color: (String:'333333') Overlay background color in 6-digit hex form without '#'
    *
-   * width:            (String:'300px') Width of the dialog
+   * width:            (String:'auto') Width of the dialog
    * height            (String:'auto') Height of the dialog
    *
    * close:            (Boolean:true) If true, closeClass, escClose and overClose will be used if set.
@@ -252,7 +284,7 @@
     opacity: 0.5,
     background_color: '333333',
 
-    width: '300px',
+    width: 'auto',
     height: 'auto',
 
     close: true,
@@ -294,26 +326,26 @@
       // determine how to handle the data based on its type
       if (typeof data != 'object') {
         // unsupported data type!
-        alert('SimpleModal Error: Unsupported data type: ' + typeof data);
+        alert('jQuery.pmodal Error: Unsupported data type: ' + typeof data);
         return false;
       }
-
       // convert DOM object to a jQuery object
       data = data instanceof jQuery ? data : $(data);
-      if (data.length != 1) {
-        // multiple elements passed!
-        alert('SimpleModal Error: Multiple elements passed!');
-        return false;
-      }
 
       // if the object came from the DOM, keep track of its parent
+      this.parentNode = null;
       if (data.parent().parent().size() > 0) {
-        this.dialog.parentNode = data.parent();
+        this.parentNode = data.parent();
 
         // persist changes? if not, make a clone of the element
         if (!this.opts.persist) {
-          this.dialog.orig = data.clone(true);
+          data = data.clone(true);
         }
+      }
+      else if (this.opts.persist) {
+        // only DOM data can persist!
+        alert('jQuery.pmodal Error: Only DOM data can persist!');
+        return false;
       }
 
       /* create the modal overlay and container */
@@ -395,14 +427,14 @@
       var self = this;
 
       // bind the close event to any element with the closeClass class
-      $('.' + self.opts.closeClass).bind('click.simplemodal', function (e) {
+      $('.' + self.opts.closeClass).bind('click.pmodal', function (e) {
         e.preventDefault();
         self.close();
       });
 
       // bind the overlay click to the close function, if enabled
       if (self.opts.close && self.opts.overlayClose) {
-        $(document).bind('click.simplemodal', function (e) {
+        $(document).bind('click.pmodal', function (e) {
           e.preventDefault();
           self.close();
         });
@@ -410,7 +442,7 @@
 
       // bind keydown events
       if (self.opts.close && self.opts.escClose) {
-        $(document).bind('keydown.simplemodal', function (e) {
+        $(document).bind('keydown.pmodal', function (e) {
           if (e.keyCode == 27) { // ESC
             e.preventDefault();
             self.close();
@@ -422,10 +454,10 @@
      * Unbind events
      */
     unbindEvents: function () {
-      $('.' + this.opts.closeClass).unbind('click.simplemodal');
+      $('.' + this.opts.closeClass).unbind('click.pmodal');
       $(document)
-        .unbind('click.simplemodal')
-        .unbind('keydown.simplemodal');
+        .unbind('click.pmodal')
+        .unbind('keydown.pmodal');
     },
     /*
      * Close the modal dialog
@@ -447,26 +479,12 @@
         this.opts.onClose.apply(this, [this.dialog]);
       }
       else {
-        // if the data came from the DOM, put it back
-        if (this.dialog.parentNode) {
-          // save changes to the data?
-          if (this.opts.persist) {
-            // insert the (possibly) modified data back into the DOM
-            this.dialog.data.hide().appendTo(this.dialog.parentNode);
-          }
-          else {
-            // remove the current and insert the original,
-            // unmodified data back into the DOM
-            this.dialog.data.hide().remove();
-            this.dialog.orig.appendTo(this.dialog.parentNode);
-          }
-        }
-        else {
-          // otherwise, remove it
-          this.dialog.data.hide().remove();
+        // put DOM data back if necessary
+        if (this.parentNode && this.opts.persist) {
+          this.dialog.data.hide().appendTo(this.parentNode);
         }
 
-        // remove the remaining elements
+        // remove all elements
         this.dialog.overlays.remove();
 
         // reset the dialog object
