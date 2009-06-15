@@ -26,6 +26,9 @@ $(document).ready(function () {
 
 function confirm(message, callback) {
 	$('#confirm').modal({
+		width: '420px',
+		height: '140px',
+
 		close:false,
 		onShow: function (dialog) {
 			dialog.data.find('.message').append(message);
