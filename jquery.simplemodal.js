@@ -82,16 +82,21 @@
  *
  * --- Fixed width and height - - - - - - - - - - - - - - - - - - - - - - - - -
  *
- * Passing fixed 'width' or 'height' CSS properties along with 'position: relative'
- * to the element you pass to $.modal() leads to problems with vertical
- * positioning of the dialog in IE (it simply does not work). So, for
- * convenience, the plugin will
+ * Fixed 'width' or 'height' CSS properties along with 'position: relative'
+ * on the element you pass to $.modal() lead to problems with vertical
+ * positioning of the dialog in IE (it simply does not work). So, *do not ever
+ * set width and height values there*, pass 'width' and 'height' options
+ * to $.modal() instead. The plugin will
  *
  * 1. apply this styles to some wrapper elements it provides to ensure proper
  *    dimensions and functioning in IE;
  *
- * 2. replace the original properties if needed (to be more precise, 'height'
- *    property will be changes to '100%', and 'width' property will be removed).
+ * 2. set necessary CSS dimension properties on the element you passed
+ *    (to be precise, 'height' will be changes to '100%').
+ *
+ * I'd prefer to make the plugin extract 'width' and 'height' properties
+ * from the passed element, but it's not always possible when they are
+ * set via CSS class. So, use options.
  *
  * --- Close buttons and links  - - - - - - - - - - - - - - - - - - - - - - - -
  *
@@ -227,6 +232,9 @@
    * opacity:          (Number:0.5) The opacity value for the overlay div, from 0.0 to 1.0
    * background_color: (String:'333333') Overlay background color in 6-digit hex form without '#'
    *
+   * width:            (String:'300px') Width of the dialog
+   * height            (String:'auto') Height of the dialog
+   *
    * close:            (Boolean:true) If true, closeClass, escClose and overClose will be used if set.
    * closeClass:       (String:'pmodal-close') The CSS class used to bind to the close event
    * escClose:         (Boolean:true) Allow Esc keypress to close the dialog?
@@ -243,6 +251,9 @@
   $.modal.defaults = {
     opacity: 0.5,
     background_color: '333333',
+
+    width: '300px',
+    height: 'auto',
 
     close: true,
     closeClass: 'pmodal-close',
@@ -295,21 +306,6 @@
         return false;
       }
 
-        /*
-         * store some dimensions, see the large comment in the top,
-         * section 'fixed width and height'
-         */
-      this.width = data.css('width');
-      if (!this.width || this.width == 'auto')
-        this.width = '300px';
-      data.css('width', 'auto');
-        // height:
-      this.height = data.css('height');
-      if (!this.height || this.height == 'auto')
-        this.height = null;
-      else
-        data.css('height', '100%');
-
       // if the object came from the DOM, keep track of its parent
       if (data.parent().parent().size() > 0) {
         this.dialog.parentNode = data.parent();
@@ -360,20 +356,22 @@
       var $container = $(document.createElement('table'))
         .attr('cellspacing', '0')
         .addClass('pmodal-container')
+        .css('width', this.opts.width)
         .appendTo($overlay);
-      if (this.width)
-        $container.css('width', this.width);
-
       var $tr = $(document.createElement('tr'))
         .appendTo($container);
-
       var $dialog = $(document.createElement('td'))
         .addClass('pmodal-dialog')
+        .css('height', this.opts.height)
         .appendTo($tr);
-      if (this.height)
-        $dialog.css('height', this.height);
-
-      data.appendTo($dialog);
+      data
+          /*
+           * see the large comment in the top,
+           * section 'fixed width and height'
+           * to know why height is set here
+           */
+        .css('height', '100%')
+        .appendTo($dialog);
 
       this.dialog.overlays = $overlay_deco.add($overlay);
       this.dialog.data = data;
