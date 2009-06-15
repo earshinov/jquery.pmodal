@@ -80,7 +80,20 @@
  * Please note that wrappers placed by the plugin around the elements
  * do not have 'position: relative' as distinct from SimpleModal.
  *
- * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * --- Fixed width and height - - - - - - - - - - - - - - - - - - - - - - - - -
+ *
+ * Passing fixed 'width' or 'height' CSS properties along with 'position: relative'
+ * to the element you pass to $.modal() leads to problems with vertical
+ * positioning of the dialog in IE (it simply does not work). So, for
+ * convenience, the plugin will
+ *
+ * 1. apply this styles to some wrapper elements it provides to ensure proper
+ *    dimensions and functioning in IE;
+ *
+ * 2. replace the original properties if needed (to be more precise, 'height'
+ *    property will be changes to '100%', and 'width' property will be removed).
+ *
+ * --- Close buttons and links  - - - - - - - - - - - - - - - - - - - - - - - -
  *
  * To make an element within your dialog to close it, add there
  * 'pmodal-close' class (you can override class name passing 'closeClass'
@@ -90,7 +103,7 @@
  *  <a href='#' class='pmodal-close'>Close</a>
  * </div>
  *
- * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * --- Close icon - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  *
  * A typical task is to add a close icon to the top right corner of the
  * dialog. We use an approach somewhat different from SimpleModal's one.
@@ -268,24 +281,43 @@
       this.occb = false;
 
       // determine how to handle the data based on its type
-      if (typeof data == 'object') {
-        // convert DOM object to a jQuery object
-        data = data instanceof jQuery ? data : $(data);
-
-        // if the object came from the DOM, keep track of its parent
-        if (data.parent().parent().size() > 0) {
-          this.dialog.parentNode = data.parent();
-
-          // persist changes? if not, make a clone of the element
-          if (!this.opts.persist) {
-            this.dialog.orig = data.clone(true);
-          }
-        }
-      }
-      else {
+      if (typeof data != 'object') {
         // unsupported data type!
         alert('SimpleModal Error: Unsupported data type: ' + typeof data);
         return false;
+      }
+
+      // convert DOM object to a jQuery object
+      data = data instanceof jQuery ? data : $(data);
+      if (data.length != 1) {
+        // multiple elements passed!
+        alert('SimpleModal Error: Multiple elements passed!');
+        return false;
+      }
+
+        /*
+         * store some dimensions, see the large comment in the top,
+         * section 'fixed width and height'
+         */
+      this.width = data.css('width');
+      if (!this.width || this.width == 'auto')
+        this.width = '300px';
+      data.css('width', 'auto');
+        // height:
+      this.height = data.css('height');
+      if (!this.height || this.height == 'auto')
+        this.height = null;
+      else
+        data.css('height', '100%');
+
+      // if the object came from the DOM, keep track of its parent
+      if (data.parent().parent().size() > 0) {
+        this.dialog.parentNode = data.parent();
+
+        // persist changes? if not, make a clone of the element
+        if (!this.opts.persist) {
+          this.dialog.orig = data.clone(true);
+        }
       }
 
       /* create the modal overlay and container */
@@ -329,11 +361,18 @@
         .attr('cellspacing', '0')
         .addClass('pmodal-container')
         .appendTo($overlay);
+      if (this.width)
+        $container.css('width', this.width);
+
       var $tr = $(document.createElement('tr'))
         .appendTo($container);
+
       var $dialog = $(document.createElement('td'))
         .addClass('pmodal-dialog')
         .appendTo($tr);
+      if (this.height)
+        $dialog.css('height', this.height);
+
       data.appendTo($dialog);
 
       this.dialog.overlays = $overlay_deco.add($overlay);

@@ -81,6 +81,11 @@ table.pmodal-container {
 
   *text-align: center;
   *position: static;
+
+  /*
+   * 'width' property is assigned to 'style'
+   * attribute dynamically with JavaScript.
+   */
 }
 
 td.pmodal-dialog {
@@ -88,6 +93,12 @@ td.pmodal-dialog {
 
   *text-align: left;
   *zoom: 1;
+
+  /*
+   * 'height' property is assigned to 'style'
+   * attribute dynamically with JavaScript,
+   * if caller required fixed width.
+   */
 }
 
 /* ------------------------------------------------------------------------- */
