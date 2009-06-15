@@ -78,7 +78,7 @@
  * dialog's look and feel, style the elements you pass to $.modal().
  *
  * Please note that wrappers placed by the plugin around the elements
- * do not have 'position: relative' as distinct from SimpleModal.
+ * do not have 'position: relative' *as distinct from SimpleModal*.
  *
  * --- Fixed width and height - - - - - - - - - - - - - - - - - - - - - - - - -
  *
@@ -111,7 +111,7 @@
  * --- Close icon - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  *
  * A typical task is to add a close icon to the top right corner of the
- * dialog. We use an approach somewhat different from SimpleModal's one.
+ * dialog. We use *an approach somewhat different from SimpleModal's one*.
  * To add the icon
  *
  * - ensure that your dialog has 'position: relative';
@@ -197,7 +197,7 @@
  *
  * - [hard] focus changing with Tab only within a dialog when it's shown
  *   (insufficient implementation in SimpleModal and buggy implementation
- *    in 'CSS Modal Dialog that Works Right').
+ *    in "CSS Modal Dialog that Works Right").
  */
 ;(function ($) {
   /*
@@ -227,7 +227,7 @@
   };
 
   /*
-   * SimpleModal default options
+   * Default options
    *
    * opacity:          (Number:0.5) The opacity value for the overlay div, from 0.0 to 1.0
    * background_color: (String:'333333') Overlay background color in 6-digit hex form without '#'
@@ -294,7 +294,7 @@
       // determine how to handle the data based on its type
       if (typeof data != 'object') {
         // unsupported data type!
-        alert('SimpleModal Error: Unsupported data type: ' + typeof data);
+        alert('jQuery.pmodal Error: Unsupported data type: ' + typeof data);
         return false;
       }
       // convert DOM object to a jQuery object
@@ -312,7 +312,7 @@
       }
       else if (this.opts.persist) {
         // only DOM data can persist!
-        alert('SimpleModal Error: Only DOM data can persist!');
+        alert('jQuery.pmodal Error: Only DOM data can persist!');
         return false;
       }
 
@@ -395,14 +395,14 @@
       var self = this;
 
       // bind the close event to any element with the closeClass class
-      $('.' + self.opts.closeClass).bind('click.simplemodal', function (e) {
+      $('.' + self.opts.closeClass).bind('click.pmodal', function (e) {
         e.preventDefault();
         self.close();
       });
 
       // bind the overlay click to the close function, if enabled
       if (self.opts.close && self.opts.overlayClose) {
-        $(document).bind('click.simplemodal', function (e) {
+        $(document).bind('click.pmodal', function (e) {
           e.preventDefault();
           self.close();
         });
@@ -410,7 +410,7 @@
 
       // bind keydown events
       if (self.opts.close && self.opts.escClose) {
-        $(document).bind('keydown.simplemodal', function (e) {
+        $(document).bind('keydown.pmodal', function (e) {
           if (e.keyCode == 27) { // ESC
             e.preventDefault();
             self.close();
@@ -422,10 +422,10 @@
      * Unbind events
      */
     unbindEvents: function () {
-      $('.' + this.opts.closeClass).unbind('click.simplemodal');
+      $('.' + this.opts.closeClass).unbind('click.pmodal');
       $(document)
-        .unbind('click.simplemodal')
-        .unbind('keydown.simplemodal');
+        .unbind('click.pmodal')
+        .unbind('keydown.pmodal');
     },
     /*
      * Close the modal dialog
