@@ -60,7 +60,7 @@ $(document).ready(function () {
 	});
 	$('a#test12').click(function (e) {
 		e.preventDefault();
-		$.modal($('<div class="test dialog"><a href="#" class="pmodal-close"/><h1>IE SELECT bleed test</h1></div>'));
+		$.modal($('<div class="test dialog"><a href="#" class="pmodal-close pmodal-close-image"/><h1>IE SELECT bleed test</h1></div>'));
 	});
 });
 
