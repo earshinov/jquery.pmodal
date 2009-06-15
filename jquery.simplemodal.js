@@ -224,6 +224,12 @@
  * - [hard] Focus changing with Tab only within a dialog when it's shown
  *   (insufficient implementation in SimpleModal and buggy implementation
  *    in "CSS Modal Dialog that Works Right").
+ *
+ * --- A note about repository organization -----------------------------------
+ *
+ * Due to historical reasons, "simplemodal_changes"
+ * is the main development branch.
+ * 
  */
 ;(function ($) {
   /*
