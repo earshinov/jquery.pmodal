@@ -42,7 +42,7 @@ $(function () {
 			e.preventDefault();
 			modalShowing = !modalShowing;
 			if (modalShowing) {
-				$("#dialog").modal();
+				$("#dialog").modal({path: '../'});
 			}
 			else {
 				$.modal.close();
