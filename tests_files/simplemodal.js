@@ -9,7 +9,7 @@
  *
  */
 $(document).ready(function () {
-	var attrs = {width: '600px', height: '400px'};
+	var attrs = {path: './', width: '600px', height: '400px'};
 
 	$('a#test1').click(function (e) {
 		e.preventDefault();
