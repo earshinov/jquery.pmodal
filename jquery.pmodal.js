@@ -205,7 +205,7 @@
  * - non-fixed width dialog test
  * - 'overClose' option test
  * - doctypes test (as at SimpleModal tests page)
- * 
+ *
  * --- TODO -------------------------------------------------------------------
  *
  * - Provide options to assign custom classes to overlays (may be used
@@ -229,7 +229,7 @@
  *
  * Due to historical reasons, "simplemodal_changes"
  * is the main development branch.
- * 
+ *
  */
 ;(function ($) {
   /*
@@ -260,6 +260,11 @@
 
   /*
    * Default options
+   *
+   * path:             (REQUIRED) Path to the directory where you place
+   *                   this file. This may be absolute or relative to the path
+   *                   to the page from where you call $.modal(). In any case
+   *                   it must end with slash ("/").
    *
    * opacity:          (Number:0.5) The opacity value for the overlay div, from 0.0 to 1.0
    * background_color: (String:'333333') Overlay background color in 6-digit hex form without '#'
@@ -316,6 +321,20 @@
       if (this.dialog.data) {
         return false;
       }
+
+      // check required options
+      var path = options['path'];
+      if (!path) {
+        // 'path' option is required!
+        alert('jQuery.pmodal Error: "path" option is required!');
+        return false;
+      }
+      if (path.charAt(path.length-1) != '/') {
+        // Value of 'path' option must end with slash!
+        alert('jQuery.pmodal Error: Value of "path" option must end with slash ("/")!');
+        return false;
+      }
+      path = null;
 
       // merge defaults and user options
       this.opts = $.extend({}, $.modal.defaults, options);
@@ -404,6 +423,15 @@
            */
         .css('height', '100%')
         .appendTo($dialog);
+
+      /*
+       * If we are working in IE, assign 'filter' CSS property
+       * to all elements with 'pmodal-close-image' class within 'data'.
+       */
+      if (ie) {
+        var filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + this.opts.path + 'x.png", sizingMethod="scale")';
+        data.find('.pmodal-close-image').css('filter', filter);
+      }
 
       this.dialog.overlays = $overlay_deco.add($overlay);
       this.dialog.data = data;
