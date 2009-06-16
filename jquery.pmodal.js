@@ -208,6 +208,8 @@
  *
  * --- TODO -------------------------------------------------------------------
  *
+ * - Provide a simpler way to add close icon, like in SimpleModal.
+ * 
  * - Provide options to assign custom classes to overlays (may be used
  *   for further customization; like in SimpleModal).
  *
