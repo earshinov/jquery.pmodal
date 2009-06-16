@@ -115,8 +115,8 @@ td.pmodal-dialog {
 
 .pmodal-close-image {
   position: absolute;
-  top: -13px;
-  right: -14px;
+  top: -11px;
+  right: -11px;
 
   width: 25px;
   height: 29px;
@@ -128,7 +128,6 @@ td.pmodal-dialog {
   cursor: pointer;
 
   *background: none;
-  *right: -14px;
   *width: 22px;
   *height: 26px;
 
