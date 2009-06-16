@@ -16,6 +16,8 @@ $(document).ready(function () {
 	$('#basicModal input.basic, #basicModal a.basic').click(function (e) {
 		e.preventDefault();
 		$('#basicModalContent').modal({
+			path: '../',
+
 			height: '400px',
 			width: '600px'
 		});

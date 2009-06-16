@@ -53,6 +53,8 @@ $(document).ready(function () {
 </div>";
 
 		$(data).modal({
+			path: '../',
+
 			close: false,
 			onOpen: contact.open,
 			onShow: contact.show,

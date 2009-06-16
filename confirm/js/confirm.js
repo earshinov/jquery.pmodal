@@ -26,6 +26,8 @@ $(document).ready(function () {
 
 function confirm(message, callback) {
 	$('#confirm').modal({
+		path: '../',
+
 		width: '420px',
 		height: '140px',
 
