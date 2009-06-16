@@ -12,6 +12,17 @@ div.pmodal-content {
   width: 100%;
   padding: 0;
   margin: 0;
+
+    /*
+     * This is necessary when underlying container has 'position: relative'.
+     * For example, the latter is needed when you want to make page footer
+     * stick to window bottom if page content is small, and to
+     * page content bottom if page content is larger than window.
+     *
+     * In the abovementioned case, if we have not 'position: relative' here,
+     * vertical scrolling of the page does not work in IE 6.
+     */
+  position: relative;
 }
 
 /* ------------------------------------------------------------------------- */
