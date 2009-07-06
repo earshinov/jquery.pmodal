@@ -1,18 +1,16 @@
 html.pmodal-html, body.pmodal-body {
-  height: 100%;
-  width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+}
+@media screen {
+  html.pmodal-html, body.pmodal-body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
 }
 
 div.pmodal-content {
-  overflow: auto;
-  height: 100%;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-
     /*
      * This is necessary when underlying container has 'position: relative'.
      * For example, the latter is needed when you want to make page footer
@@ -23,6 +21,13 @@ div.pmodal-content {
      * vertical scrolling of the page does not work in IE 6.
      */
   position: relative;
+}
+@media screen {
+  div.pmodal-content {
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+  }
 }
 
 /* ------------------------------------------------------------------------- */
@@ -35,80 +40,82 @@ div.pmodal-content {
  * http://www.hedgerwow.com/360/bugs/css-select-free.html
  */
 
-div.pmodal-overlay-decorator {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2000;
+@media screen {
+  div.pmodal-overlay-decorator {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2000;
 
-  /*
-   * 'background' and 'opacity' properties are assigned
-   * to 'style' attribute dynamically with JavaScript.
-   */
+    /*
+     * 'background' and 'opacity' properties are assigned
+     * to 'style' attribute dynamically with JavaScript.
+     */
 
-  *overflow: hidden;
-}
+    *overflow: hidden;
+  }
 
-iframe.pmodal-iframe {
-  display:none;/*sorry for IE5*/
-  display/**/:block;/*sorry for IE5*/
-  position:absolute;/*must have*/
-  top:0;/*must have*/
-  left:0;/*must have*/
-  z-index:-1;/*must have*/
-  filter:mask();/*must have*/
-  width:3000px;/*must have for any big value*/
-  height:3000px/*must have for any big value*/;
-}
+  iframe.pmodal-iframe {
+    display:none;/*sorry for IE5*/
+    display/**/:block;/*sorry for IE5*/
+    position:absolute;/*must have*/
+    top:0;/*must have*/
+    left:0;/*must have*/
+    z-index:-1;/*must have*/
+    filter:mask();/*must have*/
+    width:3000px;/*must have for any big value*/
+    height:3000px/*must have for any big value*/;
+  }
 
-div.pmodal-overlay {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2001;
-  overflow: auto;
+  div.pmodal-overlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2001;
+    overflow: auto;
 
-  *zoom: 1;
-  *background: transparent url(pixel.gif);
+    *zoom: 1;
+    *background: transparent url(pixel.gif);
 
-  /*
-   * 'filter' property are assigned to 'style'
-   * attribute dynamically with JavaScript.
-   */
-}
+    /*
+     * 'filter' property are assigned to 'style'
+     * attribute dynamically with JavaScript.
+     */
+  }
 
-table.pmodal-container {
-  z-index: 2002;
-  position: relative;
-  margin: 0 auto;
-  height: 100%;
-  vertical-align: middle;
-  z-index: 2003;
+  table.pmodal-container {
+    z-index: 2002;
+    position: relative;
+    margin: 0 auto;
+    height: 100%;
+    vertical-align: middle;
+    z-index: 2003;
 
-  *text-align: center;
-  *position: static;
+    *text-align: center;
+    *position: static;
 
-  /*
-   * 'width' property is assigned to 'style'
-   * attribute dynamically with JavaScript.
-   */
-}
+    /*
+     * 'width' property is assigned to 'style'
+     * attribute dynamically with JavaScript.
+     */
+  }
 
-td.pmodal-dialog {
-  vertical-align: middle;
+  td.pmodal-dialog {
+    vertical-align: middle;
 
-  *text-align: left;
-  *zoom: 1;
+    *text-align: left;
+    *zoom: 1;
 
-  /*
-   * 'height' property is assigned to 'style'
-   * attribute dynamically with JavaScript,
-   * if caller required fixed width.
-   */
+    /*
+     * 'height' property is assigned to 'style'
+     * attribute dynamically with JavaScript,
+     * if caller required fixed width.
+     */
+  }
 }
 
 /* ------------------------------------------------------------------------- */
