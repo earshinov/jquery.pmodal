@@ -1,3 +1,13 @@
+/*
+ * <html class='pmodal-html'>
+ *   <body class='pmodal-body'>
+ *     <div class='pmodal-content'>
+ *       ...
+ *     </div>
+ *   </body>
+ * </html>
+ */
+
 html.pmodal-html, body.pmodal-body {
   margin: 0;
   padding: 0;
@@ -31,6 +41,26 @@ div.pmodal-content {
 }
 
 /* ------------------------------------------------------------------------- */
+
+/*
+ * ...
+ * <body ...>
+ *   <div class='pmodal-overlay-decorator'>
+ *     <iframe class='pmodal-iframe'/>
+ *   </div>
+ *   <div class='pmodal-overlay'>
+ *     <table class='pmodal-container'>
+ *       <tr>
+ *         <td class='pmodal-dialog'>
+ *           ...
+ *         </td>
+ *       </tr>
+ *     </table>
+ *   </div>
+ *   ...
+ * </body>
+ * ...
+ */
 
 /*
  * CSS classes 'pmodal-overlay-decorator' and 'pmodal-iframe' are used
@@ -118,9 +148,7 @@ div.pmodal-content {
   }
 }
 
-/* ------------------------------------------------------------------------- */
-
-.pmodal-close-image {
+.pmodal-close-icon {
   position: absolute;
   top: -11px;
   right: -11px;
@@ -143,4 +171,10 @@ div.pmodal-content {
    * attribute dynamically with JavaScript
    * when user is using IE.
    */
+}
+.pmodal-close-icon:active {
+  /*
+   * Remove focus border appearing when this image is being clicked.
+   */
+  outline: none;
 }
