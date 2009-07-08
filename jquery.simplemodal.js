@@ -110,20 +110,10 @@
  *
  * --- Close icon - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  *
- * A typical task is to add a close icon to the top right corner of the
- * dialog. We use *an approach somewhat different from SimpleModal's one*.
- * To add the icon
- *
- * - ensure that your dialog has 'position: relative';
- * - and place an element with 'pmodal-close-image' style within your dialog.
- *
- * Please note that the icon won't close the dialog unless you pass
- * 'pmodal-close' class additionally. Example:
- *
- * <div id='my-dialog' style='position: relative;'>
- *   <a href='#' class='pmodal-close pmodal-close-image'></a>
- *   Dialog content goes here.
- * </div>
+ * Close icon will be added automatically. You can control it passing 'close'
+ * and 'closeIcon' options to $.modal(). If the icon is displayed,
+ * 'position: relative' will be set on the element you pass to $.modal()
+ * to ensure correct positioning of the icon.
  *
  * --- Callbacks --------------------------------------------------------------
  *
@@ -208,8 +198,6 @@
  *
  * --- TODO -------------------------------------------------------------------
  *
- * - Provide a simpler way to add close icon, like in SimpleModal.
- * 
  * - Determine how 'width', 'height' and 'position' CSS properties set on
  *   an element passed to $.modal() influence vertical positioning
  *   of the dialog in IE.  Explanation given in "fixed width and height"
@@ -269,8 +257,9 @@
    * width:            (String:'auto') Width of the dialog
    * height            (String:'auto') Height of the dialog
    *
-   * close:            (Boolean:true) If true, closeClass, escClose and overClose will be used if set.
+   * close:            (Boolean:true) If true, closeClass, closeIcon, escClose and overClose will be used if set.
    * closeClass:       (String:'pmodal-close') The CSS class used to bind to the close event
+   * closeIcon:        (Boolean:true) Provide a close icon
    * escClose:         (Boolean:true) Allow Esc keypress to close the dialog?
    * overlayClose:     (Boolean:false) Allow click on overlay to close the dialog?
    *
@@ -291,6 +280,7 @@
 
     close: true,
     closeClass: 'pmodal-close',
+    closeIcon: true,
     escClose: true,
     overlayClose: false,
 
@@ -442,12 +432,27 @@
         .appendTo($dialog);
 
       /*
+       * We add close icon to "data" as it isn't correctly positioned if
+       * added to "$dialog", even if we add "position: relative" to
+       * "pmodal-modal-dialog" CSS class. We could use additional <div> wrapper
+       * inside "$dialog", but it gives us a little profit, and we already have
+       * too much wrappers...
+       */
+      this.closeIcon = null;
+      if (this.opts.close && this.opts.closeIcon){
+        data.css('position', 'relative');
+        this.closeIcon = $("<a href='#' class='pmodal-close-icon'/>")
+          .addClass(this.opts.closeClass || 'pmodal-close')
+          .appendTo(data);
+      }
+
+      /*
        * If we are working in IE, assign 'filter' CSS property
-       * to all elements with 'pmodal-close-image' class within 'data'.
+       * to all elements with 'pmodal-close-icon' class within 'data'.
        */
       if (ie) {
         var filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + this.opts.path + 'x.png", sizingMethod="scale")';
-        data.find('.pmodal-close-image').css('filter', filter);
+        data.find('.pmodal-close-icon').css('filter', filter);
       }
 
       this.dialog.overlays = $overlay_deco.add($overlay);
@@ -524,6 +529,10 @@
         this.opts.onClose.apply(this, [this.dialog]);
       }
       else {
+        // remove the close icon
+        if (this.closeIcon)
+          this.closeIcon.remove();
+
         // put DOM data back if necessary
         if (this.parentNode && this.opts.persist) {
           this.dialog.data.hide().appendTo(this.parentNode);

@@ -148,9 +148,7 @@ div.pmodal-content {
   }
 }
 
-/* ------------------------------------------------------------------------- */
-
-.pmodal-close-image {
+.pmodal-close-icon {
   position: absolute;
   top: -11px;
   right: -11px;
@@ -174,7 +172,7 @@ div.pmodal-content {
    * when user is using IE.
    */
 }
-.pmodal-close-image:active {
+.pmodal-close-icon:active {
   /*
    * Remove focus border appearing when this image is being clicked.
    */
