@@ -378,6 +378,26 @@
       var body = $('body');
       var ie = $.browser.msie && parseInt($.browser.version, 10) < 8;
 
+      /*
+       * ...
+       * <body>
+       *   <div class='pmodal-overlay-decorator'>
+       *     <iframe class='pmodal-iframe'/>
+       *   </div>
+       *   <div class='pmodal-overlay'>
+       *     <table class='pmodal-container'>
+       *       <tr>
+       *         <td class='pmodal-dialog'>
+       *           ...
+       *         </td>
+       *       </tr>
+       *     </table>
+       *   </div>
+       *   ...
+       * </body>
+       * ...
+       */
+
       $overlay_deco = $(document.createElement('div'))
         .addClass('pmodal-overlay-decorator')
         .css({
