@@ -73,8 +73,8 @@ $(document).ready(function () {
  * and data.
  */
 function modalOpen (dialog) {
-	dialog.overlays.fadeIn('slow', function () {
-		dialog.data.slideDown('slow');
+	dialog.overlays.slideDown('slow', function () {
+		dialog.data.fadeIn('slow');
 	});
 }
 
