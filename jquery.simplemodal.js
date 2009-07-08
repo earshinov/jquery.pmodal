@@ -213,8 +213,6 @@
  * - Provide options to assign custom classes to overlays (may be used
  *   for further customization; like in SimpleModal).
  *
- * - Prevent focus border to appear around the close icon (e.g., in Firefox 3);
- *
  * - Determine how 'width', 'height' and 'position' CSS properties set on
  *   an element passed to $.modal() influence vertical positioning
  *   of the dialog in IE.  Explanation given in "fixed width and height"

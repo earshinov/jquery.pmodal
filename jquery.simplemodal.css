@@ -144,3 +144,9 @@ div.pmodal-content {
    * when user is using IE.
    */
 }
+.pmodal-close-image:active {
+  /*
+   * Remove focus border appearing when this image is being clicked.
+   */
+  outline: none;
+}
