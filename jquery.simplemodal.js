@@ -210,9 +210,6 @@
  *
  * - Provide a simpler way to add close icon, like in SimpleModal.
  * 
- * - Provide options to assign custom classes to overlays (may be used
- *   for further customization; like in SimpleModal).
- *
  * - Determine how 'width', 'height' and 'position' CSS properties set on
  *   an element passed to $.modal() influence vertical positioning
  *   of the dialog in IE.  Explanation given in "fixed width and height"
