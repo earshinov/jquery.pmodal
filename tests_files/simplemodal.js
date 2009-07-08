@@ -21,7 +21,7 @@ $(document).ready(function () {
 	});
 	$('a#test3').click(function (e) {
 		e.preventDefault();
-		$('<div class="dialog"><a href="#" class="pmodal-close pmodal-close-image"/><h1>New DOM Element</h1></div>').modal(attrs);
+		$('<div class="dialog"><h1>New DOM Element</h1></div>').modal(attrs);
 	});
 	$('a#test4').click(function (e) {
 		e.preventDefault();
@@ -30,7 +30,6 @@ $(document).ready(function () {
 	$('a#test5').click(function (e) {
 		e.preventDefault();
 		$.modal($("<div class='test dialog'>\
-					<a href='#' class='pmodal-close pmodal-close-image'/>\
 					<h1>Sample Content</h1>\
 					<p>This can be complex HTML containing <a href='#'>links</a>,\
 					<input type='text' value='input boxes' size='8'/>, etc...</p>\
@@ -62,7 +61,7 @@ $(document).ready(function () {
 	});
 	$('a#test12').click(function (e) {
 		e.preventDefault();
-		$.modal($('<div class="test dialog"><a href="#" class="pmodal-close pmodal-close-image"/><h1>IE SELECT bleed test</h1></div>'), attrs);
+		$.modal($('<div class="test dialog"><h1>IE SELECT bleed test</h1></div>'), attrs);
 	});
 });
 

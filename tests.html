@@ -45,14 +45,13 @@
 <pre><code>$.modal($('#modalContentTest'), attrs);</code></pre></li>
 
 		<li><a href="#" id="test3">Chained Function w/ jQuery DOM unattached element - default options</a>
-<pre><code>$('&lt;div class="dialog"&gt;&lt;a href="#" class="pmodal-close pmodal-close-image"/&gt;&lt;h1&gt;New DOM Element&lt;/h1&gt;&lt;/div&gt;').modal(attrs);</code></pre></li>
+<pre><code>$('&lt;div class="dialog"&gt;&lt;h1&gt;New DOM Element&lt;/h1&gt;&lt;/div&gt;').modal(attrs);</code></pre></li>
 
 		<li><a href="#" id="test4">Modal Function w/ DOM element - default options</a>
 <pre><code>$.modal(document.getElementById('modalContentTest'), attrs);</code></pre></li>
 
 		<li><a href="#" id="test5">Modal Function w/ HTML - default options</a>
 <pre><code>$.modal($("&lt;div class='test dialog'&gt;\
-		&lt;a href='#' class='pmodal-close pmodal-close-image'/&gt;\
 		&lt;h1&gt;Sample Content&lt;/h1&gt;\
 		&lt;p&gt;This can be complex HTML containing &lt;a href='#'&gt;links&lt;/a&gt;,\
 		&lt;input type='text' value='input boxes' size='8'/&gt;, etc...&lt;/p&gt;\
@@ -143,7 +142,6 @@ function modalShow (dialog) {
 <!-- DIALOGS -------------------------------------------------------------- -->
 
 <div id="modalContentTest" class="dialog" style="display: none;">
-	<a href='#' class='pmodal-close pmodal-close-image'></a>
 	<form action="#">
 	<textarea rows="5" cols="30"></textarea><br>
 	<select>
@@ -159,7 +157,6 @@ function modalShow (dialog) {
 	</form>
 </div>
 <div id="modalContentPersistTest" class="dialog" style="display: none;">
-	<a href='#' class='pmodal-close pmodal-close-image'></a>
 	<p>Enter values in the textarea and text field, then close the dialog. When you re-run the test, the data will still be there.</p>
 	<form action="#">
 	<textarea rows="5" cols="30"></textarea><br>
