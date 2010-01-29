@@ -1,0 +1,174 @@
+/*
+ * <html class='pmodal-html'>
+ *   <body class='pmodal-body'>
+ *     <div class='pmodal-content'>
+ *       ...
+ *     </div>
+ *   </body>
+ * </html>
+ */
+
+html.pmodal-html, body.pmodal-body {
+  margin: 0;
+  padding: 0;
+}
+@media screen {
+  html.pmodal-html, body.pmodal-body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+}
+
+div.pmodal-content {
+    /*
+     * This is necessary when underlying container has 'position: relative'.
+     * For example, the latter is needed when you want to make page footer
+     * stick to window bottom if page content is small, and to
+     * page content bottom if page content is larger than window.
+     *
+     * In the abovementioned case, if we have not 'position: relative' here,
+     * vertical scrolling of the page does not work in IE 6.
+     */
+  position: relative;
+}
+@media screen {
+  div.pmodal-content {
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+/* ------------------------------------------------------------------------- */
+
+/*
+ * ...
+ * <body ...>
+ *   <div class='pmodal-overlay-decorator'>
+ *     <iframe class='pmodal-iframe'/>
+ *   </div>
+ *   <div class='pmodal-overlay'>
+ *     <table class='pmodal-container'>
+ *       <tr>
+ *         <td class='pmodal-dialog'>
+ *           ...
+ *         </td>
+ *       </tr>
+ *     </table>
+ *   </div>
+ *   ...
+ * </body>
+ * ...
+ */
+
+/*
+ * CSS classes 'pmodal-overlay-decorator' and 'pmodal-iframe' are used
+ * in IE to prevent select options from bleeding through.
+ *
+ * http://anton-egorov.blogspot.com/2007/11/ie-select-z-index.html
+ * http://www.hedgerwow.com/360/bugs/css-select-free.html
+ */
+
+@media screen {
+  div.pmodal-overlay-decorator {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    *overflow: hidden;
+
+    /*
+     * 'background' and 'opacity' properties are assigned
+     * to 'style' attribute dynamically with JavaScript.
+     */
+  }
+
+  iframe.pmodal-iframe {
+    display:none;/*sorry for IE5*/
+    display/**/:block;/*sorry for IE5*/
+    position:absolute;/*must have*/
+    top:0;/*must have*/
+    left:0;/*must have*/
+    z-index:-1;/*must have*/
+    filter:mask();/*must have*/
+    width:3000px;/*must have for any big value*/
+    height:3000px/*must have for any big value*/;
+  }
+
+  div.pmodal-overlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2001;
+    overflow: auto;
+    *zoom: 1;
+
+    /*
+     * 'filter' property are assigned to 'style'
+     * attribute dynamically with JavaScript.
+     */
+  }
+
+  table.pmodal-container {
+    position: relative;
+    margin: 0 auto;
+    height: 100%;
+    vertical-align: middle;
+    z-index: 2002;
+    *text-align: center;
+    *position: static;
+
+    /*
+     * 'width' property is assigned to 'style'
+     * attribute dynamically with JavaScript.
+     */
+  }
+
+  td.pmodal-dialog {
+    vertical-align: middle;
+    *text-align: left;
+    *zoom: 1;
+
+    /*
+     * 'height' property is assigned to 'style'
+     * attribute dynamically with JavaScript,
+     * if caller required fixed width.
+     */
+  }
+}
+
+.pmodal-close-icon {
+  position: absolute;
+  top: -11px;
+  right: -11px;
+
+  width: 25px;
+  height: 29px;
+
+  display: inline;
+  z-index: 2004;
+
+  background: url(x.png) no-repeat;
+  cursor: pointer;
+
+  *background: none;
+  *width: 22px;
+  *height: 26px;
+
+  /*
+   * 'filter' property is assigned to 'style'
+   * attribute dynamically with JavaScript
+   * when user is using IE.
+   */
+}
+.pmodal-close-icon:active {
+  /*
+   * Remove focus border appearing when this image is being clicked.
+   */
+  outline: none;
+}
