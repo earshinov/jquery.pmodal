@@ -78,13 +78,12 @@ div.pmodal-content {
     top: 0;
     left: 0;
     z-index: 2000;
+    *overflow: hidden;
 
     /*
      * 'background' and 'opacity' properties are assigned
      * to 'style' attribute dynamically with JavaScript.
      */
-
-    *overflow: hidden;
   }
 
   iframe.pmodal-iframe {
@@ -107,9 +106,7 @@ div.pmodal-content {
     left: 0;
     z-index: 2001;
     overflow: auto;
-
     *zoom: 1;
-    *background: transparent url(pixel.gif);
 
     /*
      * 'filter' property are assigned to 'style'
@@ -118,13 +115,11 @@ div.pmodal-content {
   }
 
   table.pmodal-container {
-    z-index: 2002;
     position: relative;
     margin: 0 auto;
     height: 100%;
     vertical-align: middle;
-    z-index: 2003;
-
+    z-index: 2002;
     *text-align: center;
     *position: static;
 
@@ -136,7 +131,6 @@ div.pmodal-content {
 
   td.pmodal-dialog {
     vertical-align: middle;
-
     *text-align: left;
     *zoom: 1;
 
