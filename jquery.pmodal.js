@@ -166,7 +166,7 @@
  * --- Browser Compability ----------------------------------------------------
  *
  * Tested in the following browsers:
- * - IE 6
+ * - IE 6, 7, 8
  * - Firefox 3
  * - Opera 9
  * - Chrome 1
